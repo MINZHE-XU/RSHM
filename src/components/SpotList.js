@@ -5,14 +5,16 @@ import SpotBullet from './SpotBullet'
 
 export default class SpotList extends React.Component {
 
+
   render() {
     return (
       <ul>
         {this.props.spots.map((spot) =>
           <SpotBullet spot={spot}
-          center={this.props.center}
+          statusPoint={this.props.statusPoint}
           key={spot.id}
-          onClick={() => this.props.clickListSpot(spot)} />
+          onMouseOver={() => this.props.centerListSpot(spot)}
+          onMouseOut={() => this.props.centerListSpot({lat: '500',lng:'500'})}  />
         )}
       </ul>
     )

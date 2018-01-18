@@ -1,12 +1,10 @@
-/* eslint-disable no-undef */
-/* global google */
 import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { addSpot,centerListSpot } from '../actions'
-import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
-import Markers from './MarkerContainer'
+import { addSpot,clickListSpot } from '../actions'
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
+
 
 class DemoMap extends React.PureComponent {
   constructor() {
@@ -15,24 +13,24 @@ class DemoMap extends React.PureComponent {
       visible: true,
     }
   }
-  handleMapClick = (e) => {
+  handleItemClick = (e) => {
   const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
   this.props.addSpot (payload)
-  this.props.centerListSpot (payload)
   }
-  handleOnMouseOut = (e) => {
-    const payload= {lat: 0,lng:0}
-    //this.props.centerListSpot (payload)
+  handleMarkerClick = (e) => {
+    const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
+    this.props.clickListSpot (payload)
   }
-
   render() {
+
     return (
       <MyMapComponent
+        isMarkerShown={true}
         spots={this.props.spots}
         center={this.props.center}
         mode={this.props.mode}
-        onClick={this.handleMapClick}
-        onMouseOut={this.handleOnMouseOut}
+        onClick={this.handleItemClick}
+        onMarkerClick={this.handleMarkerClick}
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px` }} />}
@@ -46,17 +44,24 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
 
   <GoogleMap
     defaultZoom={8}
+    spots={props.spots}
     onClick={props.onClick}
-    onMouseOut={props.onMouseOut}
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
     onZoomChanged={props.onZoomChanged}
   >
-  <Markers />
-
+  {props.spots.map((spot) =>
+    <Marker position={{ lat: spot.lat, lng: spot.lng}}
+    visible= {props.mode==='point'}
+    key={spot.id}
+    icon={(spot.lat===props.center.lat && spot.lng===props.center.lng)? '' : 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'}
+    onClick={props.onMarkerClick}
+  />
+  )}
   {props.spots.map((spot) =>
     <Rectangle
     key={spot.id}
             visible= {props.mode==='rectangle'}
+
             bounds= {{
               north: spot.lat+0.5,
               south: spot.lat-0.5,
@@ -68,7 +73,6 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
               clickable: false,
               draggable: false,
               editable: false
-
               }
             }
     />
@@ -85,7 +89,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   addSpot: addSpot,
-  centerListSpot: centerListSpot
+  clickListSpot: clickListSpot
 }
 
 export default connect( mapStateToProps,mapDispatchToProps )(DemoMap);

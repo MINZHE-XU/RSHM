@@ -32,6 +32,7 @@ class AddSpot extends React.Component {
     node.value = '';
   }
   handleChange(e) {
+
     this.props.changeMode();
   }
 }
