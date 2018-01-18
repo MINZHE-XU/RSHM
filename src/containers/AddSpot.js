@@ -39,7 +39,7 @@ class AddSpot extends React.Component {
   }
   handleDelete(e) {
     console.log(this.props.statusPoint.clicked);
-    //this.props.deleteSpot(this.props.statusPoint.clicked);
+    this.props.deleteSpot(this.props.statusPoint.clicked);
   }
 }
 const mapStateToProps = (state) => ({

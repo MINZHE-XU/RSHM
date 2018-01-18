@@ -27,20 +27,20 @@ class Markers extends React.Component {
           (spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
           {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}: {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8)}}
         //icon={(spot.lat===this.props.center.lat && spot.lng===this.props.center.lng)? '' : {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png'}}
-        onMouseOver={this.handleOnMouseOver}
-        onClick={this.handleOnClick}
+        onMouseOver={() =>this.handleOnMouseOver(spot)}
+        onClick={() =>this.handleOnClick(spot)}
+
       />
       )
     )
   }
 
-  handleOnMouseOver= (e) => {
-    const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
-    this.props.centerListSpot (payload)
+  handleOnMouseOver= (spot, e) => {
+    this.props.centerListSpot (spot)
   }
-  handleOnClick= (e) => {
-    const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
-    this.props.clickListSpot (payload)
+
+  handleOnClick= (spot,e) => {
+    this.props.clickListSpot (spot)
   }
 }
 

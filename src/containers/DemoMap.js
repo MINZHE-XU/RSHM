@@ -17,12 +17,13 @@ class DemoMap extends React.PureComponent {
   }
   handleMapClick = (e) => {
   const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
-  this.props.addSpot (payload)
-  this.props.clickListSpot (payload)
-  this.props.centerListSpot (payload)
+  const r=this.props.addSpot (payload)
+  this.props.clickListSpot (r)
+  this.props.centerListSpot (r)
   }
+
   handleOnMouseOut = (e) => {
-    const payload= {lat: 1000,lng:1000}
+    const payload= {id:-1,lat: 1000,lng:1000}
     this.props.centerListSpot (payload)
   }
 

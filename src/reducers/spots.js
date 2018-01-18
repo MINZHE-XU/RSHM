@@ -1,6 +1,7 @@
 const spots = (state =[], action) => {
   switch (action.type) {
     case 'ADD_SPOT':
+      console.log(action)
       return [
         ...state,
         {
@@ -17,7 +18,12 @@ const spots = (state =[], action) => {
           return spot.id === action.id;
         }
       )
-      return[...currentSpotToDelete.slice(0, indexToDelete), ...currentSpotToDelete.slice(indexToDelete + 1)]
+      console.log(indexToDelete)
+      if(indexToDelete<0){
+        return state
+      }else{
+        return [...currentSpotToDelete.slice(0, indexToDelete), ...currentSpotToDelete.slice(indexToDelete + 1)]
+      }
       break;
     default:
       return state

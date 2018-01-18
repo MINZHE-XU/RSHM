@@ -17,7 +17,7 @@ export default class SpotList extends React.Component {
           buttomOnClick={() => {this.props.clickListSpot(spot)
             this.props.deleteSpot(spot)}}
           onMouseOver={() => this.props.centerListSpot(spot)}
-          onMouseOut={() => this.props.centerListSpot({lat: 1000,lng:1000})}  />
+          onMouseOut={() => this.props.centerListSpot({id:-1,lat: 1000,lng:1000})}  />
         )}
       </ul>
     )
