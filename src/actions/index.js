@@ -5,6 +5,10 @@ export function addSpot(payload) {
   console.log(payload)
   return { type:'ADD_SPOT' , id: nextTodoId++, lat:payload.lat, lng:payload.lng }
 }
+export function deleteSpot(payload) {
+  console.log(payload)
+  return { type:'DELETE_SPOT' , id: payload.id, lat:payload.lat, lng:payload.lng }
+}
 
 export function centerListSpot(payload) {
   return { type:'CENTER_SPOT' , lat:payload.lat, lng:payload.lng}

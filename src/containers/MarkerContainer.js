@@ -2,10 +2,12 @@
 /* eslint-disable no-undef */
 import React from 'react'
 import {  GoogleMap, Marker} from "react-google-maps"
-import { centerListSpot } from '../actions'
+import { clickListSpot,centerListSpot } from '../actions'
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types'
+
+const white_point_marker= 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png'
 
 
 class Markers extends React.Component {
@@ -19,10 +21,14 @@ class Markers extends React.Component {
       <Marker position={{ lat: spot.lat, lng: spot.lng}}
         key={spot.id}
         //http://kml4earth.appspot.com/icons.html
-        icon={(spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
-        {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png',scaledSize:new google.maps.Size(18, 18)}: {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8)}}
+        //is center
+        icon={  (spot.lat===this.props.statusPoint.clicked.lat && spot.lng===this.props.statusPoint.clicked.lng)?
+          {url: white_point_marker,scaledSize:new google.maps.Size(38, 38)}:
+          (spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
+          {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}: {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8)}}
         //icon={(spot.lat===this.props.center.lat && spot.lng===this.props.center.lng)? '' : {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png'}}
         onMouseOver={this.handleOnMouseOver}
+        onClick={this.handleOnClick}
       />
       )
     )
@@ -31,6 +37,10 @@ class Markers extends React.Component {
   handleOnMouseOver= (e) => {
     const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
     this.props.centerListSpot (payload)
+  }
+  handleOnClick= (e) => {
+    const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
+    this.props.clickListSpot (payload)
   }
 }
 
@@ -42,7 +52,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-  centerListSpot: centerListSpot
+  centerListSpot: centerListSpot,
+  clickListSpot:clickListSpot
 }
 
 

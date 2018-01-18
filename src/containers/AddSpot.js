@@ -3,7 +3,7 @@ import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot } from '../actions'
-import { changeMode } from '../actions'
+import { deleteSpot, changeMode } from '../actions'
 
 class AddSpot extends React.Component {
   constructor() {
@@ -19,6 +19,9 @@ class AddSpot extends React.Component {
         <button onClick={(e) => this.handleChange(e)}>
           change mode
         </button>
+        <button onClick={(e) => this.handleDelete(e)}>
+          DeleteSelectedSpot
+        </button>
       </div>
     )
   }
@@ -32,12 +35,18 @@ class AddSpot extends React.Component {
     node.value = '';
   }
   handleChange(e) {
-
     this.props.changeMode();
   }
+  handleDelete(e) {
+    console.log(this.props.statusPoint.clicked);
+    //this.props.deleteSpot(this.props.statusPoint.clicked);
+  }
 }
-
+const mapStateToProps = (state) => ({
+  statusPoint:state.statusPoint
+})
 const mapDispatchToProps = {
-  changeMode: changeMode
+  changeMode: changeMode,
+  deleteSpot: deleteSpot
 }
-export default connect( null,mapDispatchToProps)(AddSpot);
+export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
