@@ -14,7 +14,7 @@ const origin = {
 const statusPoint = (state=origin , action) => {
   switch (action.type) {
     case 'CENTER_SPOT':
-    console.log(action)
+    //console.log(action)
       return {
         center:{
           id: action.id,
@@ -25,7 +25,7 @@ const statusPoint = (state=origin , action) => {
       }
       break;
     case 'CLICKED_SPOT':
-    console.log(action)
+    //console.log(action)
       if (state.clicked.id===action.id){
         return {
           center:state.center,

@@ -34,7 +34,7 @@ class SizeControl extends React.Component {
 
     const lengthValue= (this.refs.lengthInput.value.trim()==="") ? parseFloat(this.refs.lengthInput.placeholder):parseFloat(this.refs.lengthInput.value.trim())
     const heightValue= (this.refs.heightInput.value.trim()==="") ? parseFloat(this.refs.heightInput.placeholder):parseFloat(this.refs.heightInput.value.trim())
-    if(0<lengthValue && 0<heightValue){
+    if(0<lengthValue && lengthValue<=360 && 0<heightValue && heightValue<=180 ){
       const r=this.props.changeSize({length:lengthValue,height:heightValue})
 
       this.setState({ message:"changed"})
@@ -43,9 +43,7 @@ class SizeControl extends React.Component {
     }else{
       this.setState({ message:"invalid value"})
     }
-
     //this.props.addSpot({lat,lng});
-
   }
 
 }
