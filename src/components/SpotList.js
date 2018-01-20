@@ -14,10 +14,13 @@ export default class SpotList extends React.Component {
           statusPoint={this.props.statusPoint}
           key={spot.id}
           onClick={() => this.props.clickListSpot(spot)}
-          buttomOnClick={() => {this.props.clickListSpot(spot)
-            this.props.deleteSpot(spot)}}
+          buttomOnClick={() => {
+            const r=this.props.deleteSpot(spot)
+            this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
+            this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
+          }}
           onMouseOver={() => this.props.centerListSpot(spot)}
-          onMouseOut={() => this.props.centerListSpot({id:-1,lat: 1000,lng:1000})}  />
+          onMouseOut={() => this.props.centerListSpot({id:-1,lat: 100000,lng:10000})}  />
         )}
       </ul>
     )

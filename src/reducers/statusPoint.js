@@ -23,6 +23,7 @@ const statusPoint = (state=origin , action) => {
         },
         clicked:state.clicked
       }
+        break;
     case 'CLICKED_SPOT':
     console.log(action)
       if (state.clicked.id===action.id){
@@ -44,6 +45,7 @@ const statusPoint = (state=origin , action) => {
           }
         }
       }
+      break;
 
 
       default:

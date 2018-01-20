@@ -12,13 +12,13 @@ const spots = (state =[], action) => {
       ]
       break;
     case 'DELETE_SPOT':
+    console.log(action)
       const currentSpotToDelete = state
       const indexToDelete = currentSpotToDelete.findIndex(
         function(spot){
           return spot.id === action.id;
         }
       )
-      console.log(indexToDelete)
       if(indexToDelete<0){
         return state
       }else{

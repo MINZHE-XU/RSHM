@@ -29,11 +29,13 @@ class DemoMap extends React.PureComponent {
 
   render() {
     return (
+
       <MyMapComponent
         spots={this.props.spots}
         center={this.props.center}
         mode={this.props.mode}
         onClick={this.handleMapClick}
+        length={this.props.size.length}
         onMouseOut={this.handleOnMouseOut}
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
@@ -60,7 +62,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     key={spot.id}
             visible= {props.mode==='rectangle'}
             bounds= {{
-              north: spot.lat+0.5,
+              north: spot.lat+props.length,
               south: spot.lat-0.5,
               east: spot.lng+0.5,
               west: spot.lng-0.5
@@ -70,7 +72,6 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
               clickable: false,
               draggable: false,
               editable: false
-
               }
             }
     />
@@ -82,7 +83,8 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
 const mapStateToProps = (state) => ({
   spots:state.spots,
   center:state.center,
-  mode:state.mode
+  mode:state.mode,
+  size:state.size
 })
 
 const mapDispatchToProps = {
