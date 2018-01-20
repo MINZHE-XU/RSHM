@@ -6,28 +6,26 @@ import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types'
 
-const white_point_marker= 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png'
 
-
-class Shades extends React.Component {
+class MRs extends React.Component {
   constructor() {
     super();
   }
-
   render() {
     return (
-      this.props.spots.map((spot) =>
+      this.props.mrs.map((mr) =>
+
         <Rectangle
-        key={spot.id}
-        visible={this.props.mode==="point"}
+        key={mr.id}
+        visible={this.props.mode==="rectangle"}
                 bounds= {{
-                  north: spot.lat+this.props.size.height/2,
-                  south: spot.lat-this.props.size.height/2,
-                  east: spot.lng+this.props.size.length/2,
-                  west: spot.lng-this.props.size.length/2
+                  north: mr.north,
+                  south: mr.south,
+                  east: mr.east,
+                  west: mr.west
                 }}
                 options={{strokeWeight: 0,
-                  fillOpacity: 0.1,
+                  fillOpacity: mr.rs * 0.1,
                   clickable: false,
                   draggable: false,
                   editable: false
@@ -43,11 +41,10 @@ class Shades extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-  spots:state.spots,
+  mrs:state.mrs,
   size:state.size,
   mode:state.mode
-
 })
 
 
-export default connect( mapStateToProps )(Shades );
+export default connect( mapStateToProps )(MRs );

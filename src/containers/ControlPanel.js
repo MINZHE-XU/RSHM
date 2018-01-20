@@ -2,7 +2,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import {changeMode, changeSize } from '../actions'
+import {changeMode,updateMRs } from '../actions'
 
 class ControlPanel extends React.Component {
   constructor() {
@@ -14,23 +14,29 @@ class ControlPanel extends React.Component {
     return (
       <div>
         <button onClick={(e) => this.handleChangeMode(e)}>
-          change mode
+          change show mode
         </button>
 
+        <button onClick={(e) => this.handleUpdate(e)}>
+          updateMRs
+        </button>
       </div>
     )
   }
   handleChangeMode(e) {
     this.props.changeMode();
   }
-  handleChangeMode1(e) {
-    this.props.changeSize({length:2,height:2});
+  handleUpdate(e) {
+    this.props.updateMRs({spots:this.props.spots, size:this.props.size} );
   }
 }
 const mapStateToProps = (state) => ({
+    spots:state.spots,
+    size:state.size
 
 })
 const mapDispatchToProps = {
   changeMode: changeMode,
+  updateMRs: updateMRs
 }
 export default connect( mapStateToProps,mapDispatchToProps)(ControlPanel);

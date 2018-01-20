@@ -3,12 +3,14 @@ import spots from './spots'
 import statusPoint from './statusPoint'
 import mode from './mode'
 import size from './size'
+import mrs from './mrs'
 
 const todoApp = combineReducers({
   spots,
   statusPoint,
   size,
-  mode
+  mode,
+  mrs
 })
 
 export default todoApp

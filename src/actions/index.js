@@ -13,6 +13,9 @@ export function deleteSpot(payload) {
   //clickListSpot ({id:-1 , lat:10000, lng:10000})
   return { type:'DELETE_SPOT' , id: payload.id, lat:payload.lat, lng:payload.lng }
 }
+export function deleteAllSpot(payload) {
+  return { type:'DELETE_ALL_SPOT' }
+}
 
 export function centerListSpot(payload) {
   return { type:'CENTER_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng}
@@ -28,4 +31,8 @@ export function changeSize(payload) {
 
 export function changeMode() {
   return { type:'CHANGE_MODE' }
+}
+
+export function updateMRs(payload) {
+  return { type:'FULLY_UPDATE_MRS' ,spots: payload.spots,size:payload.size }
 }

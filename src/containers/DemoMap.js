@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import { addSpot,clickListSpot,centerListSpot } from '../actions'
 import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
 import Markers from './MarkerContainer'
+import Shades from '../components/Shades'
+import MRs from './MRs'
 
 class DemoMap extends React.PureComponent {
   constructor() {
@@ -16,10 +18,13 @@ class DemoMap extends React.PureComponent {
     }
   }
   handleMapClick = (e) => {
-  const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
-  const r=this.props.addSpot (payload)
-  this.props.clickListSpot (r)
-  this.props.centerListSpot (r)
+    if (this.props.mode==="point"){
+      const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
+      const r=this.props.addSpot (payload)
+      this.props.clickListSpot (r)
+      this.props.centerListSpot (r)
+    }
+
   }
 
   handleOnMouseOut = (e) => {
@@ -33,9 +38,7 @@ class DemoMap extends React.PureComponent {
       <MyMapComponent
         spots={this.props.spots}
         center={this.props.center}
-        mode={this.props.mode}
         onClick={this.handleMapClick}
-        length={this.props.size.length}
         onMouseOut={this.handleOnMouseOut}
         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places"
         loadingElement={<div style={{ height: `100%` }} />}
@@ -56,27 +59,8 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     onZoomChanged={props.onZoomChanged}
   >
   <Markers />
-
-  {props.spots.map((spot) =>
-    <Rectangle
-    key={spot.id}
-            visible= {props.mode==='rectangle'}
-            bounds= {{
-              north: spot.lat+props.length,
-              south: spot.lat-0.5,
-              east: spot.lng+0.5,
-              west: spot.lng-0.5
-            }}
-            options={{strokeWeight: 0,
-              fillOpacity: 0.1,
-              clickable: false,
-              draggable: false,
-              editable: false
-              }
-            }
-    />
-  )}
-
+  <Shades />
+  <MRs />
   </GoogleMap>
 ))
 

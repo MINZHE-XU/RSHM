@@ -20,16 +20,16 @@ class Markers extends React.Component {
       this.props.spots.map((spot) =>
       <Marker position={{ lat: spot.lat, lng: spot.lng}}
         key={spot.id}
+        visible={this.props.mode==="point"}
         //http://kml4earth.appspot.com/icons.html
         //is center
         icon={  (spot.lat===this.props.statusPoint.clicked.lat && spot.lng===this.props.statusPoint.clicked.lng)?
           {url: white_point_marker,scaledSize:new google.maps.Size(38, 38)}:
           (spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
-          {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}: {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8)}}
+          {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}: {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}}
         //icon={(spot.lat===this.props.center.lat && spot.lng===this.props.center.lng)? '' : {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png'}}
         onMouseOver={() =>this.handleOnMouseOver(spot)}
         onClick={() =>this.handleOnClick(spot)}
-
       />
       )
     )

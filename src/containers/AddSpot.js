@@ -3,7 +3,7 @@ import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot, changeMode } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot } from '../actions'
 
 class AddSpot extends React.Component {
   constructor() {
@@ -26,6 +26,9 @@ class AddSpot extends React.Component {
         {this.state.message}
         <button onClick={(e) => this.handleDelete(e)}>
           DeleteSelectedSpot
+        </button>
+        <button onClick={(e) => this.handleDeleteAll(e)}>
+          DeleteAll
         </button>
 <br />
 
@@ -57,13 +60,18 @@ class AddSpot extends React.Component {
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
   }
+  handleDeleteAll(e) {
+    const r=this.props.deleteAllSpot()
+    this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
+    this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
+  }
 }
 const mapStateToProps = (state) => ({
   statusPoint:state.statusPoint
 })
 const mapDispatchToProps = {
-  changeMode: changeMode,
   deleteSpot: deleteSpot,
+  deleteAllSpot: deleteAllSpot,
   clickListSpot: clickListSpot,
   centerListSpot: centerListSpot,
   addSpot: addSpot
