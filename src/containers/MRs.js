@@ -10,11 +10,13 @@ import PropTypes from 'prop-types'
 class MRs extends React.Component {
   constructor() {
     super();
+    this.state = {
+      coloredID: -1
+    }
   }
   render() {
     return (
       this.props.mrs.map((mr) =>
-
         <Rectangle
         key={mr.id}
         visible={this.props.mode==="rectangle"}
@@ -24,18 +26,29 @@ class MRs extends React.Component {
                   east: mr.east,
                   west: mr.west
                 }}
-                options={{strokeWeight: 0,
+                options={{strokeWeight: (this.state.coloredID===mr.id) ? 1 : 0.1 ,
                   fillOpacity: mr.rs * 0.1,
-                  clickable: false,
                   draggable: false,
-                  editable: false
+                  editable: false,
+                  fillColor:(this.state.coloredID===mr.id) ? "red" : "black" ,
+                  strokeColor: (this.state.coloredID===mr.id) ? "red" : "black"
                   }
                 }
+        onMouseOut={() =>this.handleOnMouseOut(mr.id)}
+        onMouseOver={() =>this.handleOnMouseOver(mr.id)}
         />
       )
     )
   }
+  handleOnMouseOver= (id, e) => {
+    this.setState({ coloredID: id})
+    console.log("on")
+  }
 
+  handleOnMouseOut= (id,e) => {
+      this.setState({ coloredID: -1})
+      console.log("out")
+  }
 
 }
 
