@@ -10,8 +10,15 @@ const mrs = (state =origin, action) => {
       const rectangles=pointToRectangle(action.spots, action.size)
       console.log("rectangles")
       console.log(rectangles)
-      const done=sweep(rectangles)
-      return rectangles
+      const sweepedData=sweepRectangle(rectangles)
+      console.log("sweepedData")
+      console.log(sweepedData)
+      const sweepedMRs=sweepedDataToRectangle(sweepedData)
+      console.log("sweepedMRs")
+      console.log(sweepedMRs)
+
+
+      return sweepedMRs
       break;
 
     default:
@@ -21,7 +28,81 @@ const mrs = (state =origin, action) => {
 
 export default mrs
 
-export function sweep(rectangles){
+export function sweepedDataToRectangle(sweepedData){
+  let mrs=[];
+  let nextTodoId=0;
+  if (sweepedData.length===0){
+    return mrs
+  }else{
+    for(let i=0; i<sweepedData.length;i++){
+      let westValue= sweepedData[i].xValue;
+      let  eastValue;
+      if (i===sweepedData.length-1){
+        eastValue= sweepedData[0].xValue;
+      }else{
+        eastValue= sweepedData[i+1].xValue;
+      }
+
+      let yGroup= getYGroup(sweepedData[i].group)
+      console.log("sweepedDataGroup")
+      console.log(sweepedData[i].group)
+      console.log("yGroup")
+      console.log(yGroup)
+      yGroup.map(function(ay){
+        mrs=mrs.concat([{id:nextTodoId++,
+          north: ay.northValue,
+          south: ay.southValue,
+          east: eastValue,
+          west: westValue,
+          rs:ay.rs}])
+        return 1;
+      });
+
+
+    }
+    return mrs
+  }
+}
+export function getYGroup(sweepedDataGroup){
+  //sweepedDataGroup.sort(function (x, y) {if (x.y < y.y) {return -1;}if (x.y > y.y) {return 1;}return 0;});
+  //xs=Array.from(new Set(xs));
+  let yValues=sweepedDataGroup.map(function(sweepedDataGroup1){
+    return sweepedDataGroup1.y;
+  });
+  yValues=yValues.concat([-90,90]);
+  yValues.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
+  yValues=Array.from(new Set(yValues));
+  console.log(yValues)
+  let tempRS=0;
+  let yGroup=[];
+  for (let i=0; i<yValues.length-1; i++){
+    sweepedDataGroup.map(function(sweepedData){
+      if(sweepedData.y>=yValues[i] && sweepedData.y<yValues[i+1]){
+        switch (sweepedData.type){
+          case "down":
+          tempRS=tempRS+1;
+          break;
+          case "up":
+          tempRS=tempRS-1;
+          break;
+          default:
+        }
+      }
+      return 1;
+    });
+    yGroup= yGroup.concat(
+      [{ southValue:yValues[i] ,
+        northValue: yValues[i+1],
+        rs: tempRS
+      }]
+    );
+  }
+  return yGroup
+}
+
+
+
+export function sweepRectangle(rectangles){
   let nextTodoId = 0;
   let sweepedStore=[];
   let xs = rectangles.map(function(rectangle){
@@ -64,14 +145,10 @@ export function sweep(rectangles){
     }
     return {xValue:x, group:forX};
   })
-
-
-
   console.log("xs")
   console.log(xs)
-  console.log("groups")
-  console.log(groups)
-  return sweepedStore
+
+  return groups
 }
 
 
@@ -81,7 +158,7 @@ export function pointToRectangle(spots, size){
     let northValue=spot.lat+size.height/2
     if(northValue>90){northValue=90}
     let southValue=spot.lat-size.height/2
-    if(southValue>90){southValue=-90}
+    if(southValue<-90){southValue=-90}
     let westValue=spot.lng-size.length/2
     if(westValue<=-180){westValue=westValue+360}
     let eastValue=spot.lng+size.length/2
