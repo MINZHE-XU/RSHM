@@ -36,3 +36,8 @@ export function changeMode() {
 export function updateMRs(payload) {
   return { type:'FULLY_UPDATE_MRS' ,spots: payload.spots,size:payload.size }
 }
+
+export function addSpotForMRs(payload) {
+  console.log(payload)
+  return { type:'ADD_ONE_SPOT_MRS' ,spots: payload.spots,size:payload.size }
+}

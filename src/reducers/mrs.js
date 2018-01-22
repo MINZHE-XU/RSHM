@@ -1,24 +1,25 @@
 const origin=[{id:0, north:-33.03900467904444, south:-34.03900467904444,west:150.4849853515625, east:151.4849853515625,rs:1}
 ,{id:1, north:-33.33900467904444, south:-34.33900467904444,west:150.0849853515625, east:151.0849853515625,rs:1}]
-const mrs = (state =origin, action) => {
+const mrs = (state =[], action) => {
   switch (action.type) {
     case 'FULLY_UPDATE_MRS':
-      console.log(action)
-      console.log(action.spots)
-      console.log(action.size)
-
       const rectangles=pointToRectangle(action.spots, action.size)
-      console.log("rectangles")
-      console.log(rectangles)
       const sweepedData=sweepRectangle(rectangles)
-      console.log("sweepedData")
-      console.log(sweepedData)
       const sweepedMRs=sweepedDataToRectangle(sweepedData)
-      console.log("sweepedMRs")
-      console.log(sweepedMRs)
-
-
       return sweepedMRs
+      break;
+    case 'ADD_ONE_SPOT_MRS':
+      console.log(action)
+      if (state.length<=1){
+        return sweepedDataToRectangle(sweepRectangle(pointToRectangle([action.spots], action.size)))
+      }else{
+        const rectangles1=pointToRectangle([action.spots], action.size)
+        console.log(pickWestEast('west', state, rectangles1[0]))
+
+        return state
+      }
+
+
       break;
 
     default:
@@ -28,6 +29,60 @@ const mrs = (state =origin, action) => {
 
 export default mrs
 
+
+export function pickWestEast(direction, mrs, rec){
+  console.log("direction")
+  console.log(direction)
+  console.log("mrs")
+  console.log(mrs)
+  console.log("rec")
+  console.log(rec)
+  let longitude= 0
+  if (direction==='west'){
+    longitude= rec.west;
+  }else{
+    longitude= rec.east;
+  }
+  console.log("longitude")
+  console.log(longitude)
+  let affectedMRs=[]
+  let unAffectedMRs=[]
+  mrs.map(function(mr){
+    if (mr.west<mr.east){
+      //common case
+      if(longitude>mr.west && longitude<mr.east){
+        affectedMRs.concat([mr]);
+      }else{
+        unAffectedMRs.concat([mr]);
+      }
+
+    }else{
+      //other case
+      if(longitude>mr.west || longitude<mr.east){
+        affectedMRs.concat([mr]);
+      }else{
+        unAffectedMRs.concat([mr]);
+      }
+    }
+  });
+  console.log (affectedMRs)
+  console.log(unAffectedMRs)
+      return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs };
+}
+
+
+//fully update functions
+/**
+      console.log(action)
+      console.log(action.spots)
+      console.log(action.size)
+      console.log("rectangles")
+      console.log(rectangles)
+      console.log("sweepedData")
+      console.log(sweepedData)
+      console.log("sweepedMRs")
+      console.log(sweepedMRs)
+      **/
 export function sweepedDataToRectangle(sweepedData){
   let mrs=[];
   let nextTodoId=0;
@@ -44,10 +99,7 @@ export function sweepedDataToRectangle(sweepedData){
       }
 
       let yGroup= getYGroup(sweepedData[i].group)
-      console.log("sweepedDataGroup")
-      console.log(sweepedData[i].group)
-      console.log("yGroup")
-      console.log(yGroup)
+      //console.log(sweepedData[i].group)
       yGroup.map(function(ay){
         mrs=mrs.concat([{id:nextTodoId++,
           north: ay.northValue,
@@ -69,12 +121,14 @@ export function getYGroup(sweepedDataGroup){
   let yValues=sweepedDataGroup.map(function(sweepedDataGroup1){
     return sweepedDataGroup1.y;
   });
+  //contain all the rectangle y value
   yValues=yValues.concat([-90,90]);
   yValues.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
   yValues=Array.from(new Set(yValues));
-  console.log(yValues)
+  //console.log(yValues)
   let tempRS=0;
   let yGroup=[];
+  //become y with rs
   for (let i=0; i<yValues.length-1; i++){
     sweepedDataGroup.map(function(sweepedData){
       if(sweepedData.y>=yValues[i] && sweepedData.y<yValues[i+1]){
@@ -145,8 +199,8 @@ export function sweepRectangle(rectangles){
     }
     return {xValue:x, group:forX};
   })
-  console.log("xs")
-  console.log(xs)
+  //console.log("xs")
+  //console.log(xs)
 
   return groups
 }

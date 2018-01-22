@@ -5,7 +5,7 @@ const origin=[
 {id: 10003, lat: -34.11180455556898, lng: 151.138916015625},
 {id: 10004, lat: -34.307143856288036, lng: 149.3646240234375},
 {id: 10005, lat: -34.7009774147201, lng: 150.31494140625}]
-const spots = (state =origin, action) => {
+const spots = (state =[], action) => {
   switch (action.type) {
     case 'ADD_SPOT':
       console.log(action)

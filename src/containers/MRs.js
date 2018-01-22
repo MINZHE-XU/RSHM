@@ -14,11 +14,12 @@ class MRs extends React.Component {
       coloredID: -1
     }
   }
+
   render() {
     return (
-      this.props.mrs.map((mr) =>
+      this.props.mrs.map((mr, index) =>
         <Rectangle
-        key={mr.id}
+        key={index}
         visible={this.props.mode==="rectangle"}
                 bounds= {{
                   north: mr.north,
@@ -30,24 +31,23 @@ class MRs extends React.Component {
                   fillOpacity: mr.rs * 0.1,
                   draggable: false,
                   editable: false,
-                  fillColor:(this.state.coloredID===mr.id) ? "red" : "black" ,
-                  strokeColor: (this.state.coloredID===mr.id) ? "red" : "black"
+                  fillColor:(this.state.coloredID===index) ? "red" : "black" ,
+                  strokeColor: (this.state.coloredID===index) ? "red" : "black"
                   }
                 }
-        onMouseOut={() =>this.handleOnMouseOut(mr.id)}
-        onMouseOver={() =>this.handleOnMouseOver(mr.id)}
+        onMouseOut={() =>this.handleOnMouseOut(index)}
+        onMouseOver={() =>this.handleOnMouseOver(index)}
         />
+
       )
     )
   }
   handleOnMouseOver= (id, e) => {
     this.setState({ coloredID: id})
-    console.log("on")
   }
 
   handleOnMouseOut= (id,e) => {
-      this.setState({ coloredID: -1})
-      console.log("out")
+   this.setState({ coloredID: -1})
   }
 
 }

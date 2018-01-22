@@ -4,7 +4,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { addSpot,clickListSpot,centerListSpot } from '../actions'
+import { addSpot,addSpotForMRs,clickListSpot,centerListSpot } from '../actions'
 import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
 import Markers from './MarkerContainer'
 import Shades from '../components/Shades'
@@ -21,10 +21,11 @@ class DemoMap extends React.PureComponent {
     if (this.props.mode==="point"){
       const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
       const r=this.props.addSpot (payload)
+      //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
+      this.props.addSpotForMRs ({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
       this.props.clickListSpot (r)
       this.props.centerListSpot (r)
     }
-
   }
 
   handleOnMouseOut = (e) => {
@@ -73,6 +74,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   addSpot: addSpot,
+  addSpotForMRs: addSpotForMRs,
   clickListSpot: clickListSpot,
   centerListSpot: centerListSpot
 }
