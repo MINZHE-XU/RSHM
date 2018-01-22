@@ -1,22 +1,27 @@
-const origin=[{id:0, north:-33.03900467904444, south:-34.03900467904444,west:150.4849853515625, east:151.4849853515625,rs:1}
-,{id:1, north:-33.33900467904444, south:-34.33900467904444,west:150.0849853515625, east:151.0849853515625,rs:1}]
-const mrs = (state =[], action) => {
+const origin=[{id:0, north:-33.03900467904444, south:-34.03900467904444,west:150.4849853515625, east:151.4849853515625,rs:1 }
+,{id:1, north:-33.33900467904444, south:-34.33900467904444,west:150.0849853515625, east:151.0849853515625,rs:1 }]
+const origin1=[{id:0, north:90, south:-90,west:-180, east:180,rs:0}]
+const mrs = (state =origin1, action) => {
   switch (action.type) {
     case 'FULLY_UPDATE_MRS':
       const rectangles=pointToRectangle(action.spots, action.size)
       const sweepedData=sweepRectangle(rectangles)
-      const sweepedMRs=sweepedDataToRectangle(sweepedData)
+      const sweepedMRs=sweepedDataToRectangle(sweepedData,0)
       return sweepedMRs
       break;
     case 'ADD_ONE_SPOT_MRS':
       console.log(action)
-      if (state.length<=1){
-        return sweepedDataToRectangle(sweepRectangle(pointToRectangle([action.spots], action.size)))
+      const rectangle1=pointToRectangle([action.spots], action.size)
+      const rec=rectangle1[0]
+      console.log(rec)
+      let storedMRs=state
+      if (rec.west<rec.east){
+        return addOneSpotMRS( storedMRs, rec)
       }else{
-        const rectangles1=pointToRectangle([action.spots], action.size)
-        console.log(pickWestEast('west', state, rectangles1[0]))
-
-        return state
+        //divided into two rectangles
+        const rectangleLeft={ north:rec.north , south:rec.south,west:-180, east:rec.east, rs:rec.rs}
+        const rectangleRight={ north:rec.north , south:rec.south,west:rec.west, east:180, rs:rec.rs}
+        return addOneSpotMRS(addOneSpotMRS( storedMRs, rectangleLeft),rectangleRight )
       }
 
 
@@ -27,10 +32,84 @@ const mrs = (state =[], action) => {
   }
 }
 
-export default mrs
+//cut left and right unaffected partitions first, then add rs for the overlapped partions
+export function addOneSpotMRS( mrs, rec){
+  let effects=searchAffectedMRs(mrs, rec)
+  console.log( effects)
+  let storedMRs=effects.unAffectedMRs
+  storedMRs=storedMRs.concat(updateOverlappingAdd( effects.affectedMRs, rec ))
+  console.log(storedMRs)
+  return storedMRs
+}
+
+export function updateOverlappingAdd( mrs, rec){
+  let storedMRs=[]
+  let effects= updateOverappingWestEast( mrs , rec)
+  storedMRs=storedMRs.concat(effects.unAffectedMRs)
+  effects= updateOverappingNorthSouth(effects.affectedMRs, rec)
+  storedMRs=storedMRs.concat(effects.unAffectedMRs)
+  storedMRs=storedMRs.concat(effects.affectedMRs.map(function(mr){
+    return {north:mr.north, south:mr.south, west:mr.west, east:mr.east, rs:mr.rs+rec.rs }
+  }))
+  return storedMRs
+}
+
+export function updateOverappingNorthSouth( mrs, rec){
+  let toDivide=[]
+  let unAffectedMRs=[]
+  mrs.map(function(mr){
+    if(mr.south<rec.north && rec.north<mr.north ){
+      unAffectedMRs=unAffectedMRs.concat([{ north:mr.north, south:rec.north,west:mr.west, east:mr.east, rs:mr.rs}])
+      toDivide=toDivide.concat([{ north:rec.north , south:mr.south,west:mr.west, east:mr.east, rs:mr.rs}])
+    }else{
+      toDivide=toDivide.concat([mr])
+    }
+    return 1
+  })
+  let temp = toDivide
+  toDivide=[]
+  temp.map(function(mr){
+    if(mr.south<rec.south && rec.south<mr.north ){
+      unAffectedMRs=unAffectedMRs.concat([{ north:rec.south, south:mr.south,west:mr.west, east:mr.east,rs:mr.rs}])
+      toDivide=toDivide.concat([{ north:mr.north, south:rec.south,west:mr.west, east:mr.east, rs:mr.rs}])
+    }else{
+      toDivide=toDivide.concat([mr])
+    }
+    return 1
+  })
+  return {affectedMRs:toDivide, unAffectedMRs:unAffectedMRs }
+}
+
+export function updateOverappingWestEast( mrs , rec){
+  let toDivide=[]
+  let unAffectedMRs=[]
+  mrs.map(function(mr){
+    if(mr.west<rec.west && rec.west<mr.east ){
+      unAffectedMRs=unAffectedMRs.concat([{ north:mr.north, south:mr.south,west:mr.west, east:rec.west,rs:mr.rs}])
+      toDivide=toDivide.concat([{ north:mr.north, south:mr.south,west:rec.west, east:mr.east, rs:mr.rs}])
+    }else{
+      toDivide=toDivide.concat([mr])
+    }
+    return 1
+  })
+  let temp = toDivide
+  toDivide=[]
+  temp.map(function(mr){
+    if(mr.west<rec.east && rec.east<mr.east ){
+      unAffectedMRs=unAffectedMRs.concat([{ north:mr.north, south:mr.south,west:rec.east, east:mr.east,rs:mr.rs}])
+      toDivide=toDivide.concat([{ north:mr.north, south:mr.south,west:mr.west, east:rec.east, rs:mr.rs}])
+    }else{
+      toDivide=toDivide.concat([mr])
+    }
+    return 1
+  })
+
+return {affectedMRs:toDivide, unAffectedMRs:unAffectedMRs }
+}
 
 
-export function pickWestEast(direction, mrs, rec){
+
+export function searchAffectedMRsaaaaa(direction,mrs, rec){
   console.log("direction")
   console.log(direction)
   console.log("mrs")
@@ -55,7 +134,6 @@ export function pickWestEast(direction, mrs, rec){
       }else{
         unAffectedMRs.concat([mr]);
       }
-
     }else{
       //other case
       if(longitude>mr.west || longitude<mr.east){
@@ -71,6 +149,27 @@ export function pickWestEast(direction, mrs, rec){
 }
 
 
+
+
+export function searchAffectedMRs(mrs, rec){
+  console.log("mrs")
+  console.log(mrs)
+  console.log("rec")
+  console.log(rec)
+  let affectedMRs=[]
+  let unAffectedMRs=[]
+  mrs.map(function(mr){
+    //common case
+    //!(rec.west>=mr.east || rec.east<=mr.west)
+    if(!(rec.west>=mr.east || rec.east<=mr.west || rec.north<=mr.south || rec.south>=mr.north )){
+      affectedMRs=affectedMRs.concat([mr]);
+    }else{
+      unAffectedMRs=unAffectedMRs.concat([mr]);
+    }
+  });
+  return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs };
+}
+
 //fully update functions
 /**
       console.log(action)
@@ -83,7 +182,7 @@ export function pickWestEast(direction, mrs, rec){
       console.log("sweepedMRs")
       console.log(sweepedMRs)
       **/
-export function sweepedDataToRectangle(sweepedData){
+export function sweepedDataToRectangle(sweepedData ,limit){
   let mrs=[];
   let nextTodoId=0;
   if (sweepedData.length===0){
@@ -101,13 +200,16 @@ export function sweepedDataToRectangle(sweepedData){
       let yGroup= getYGroup(sweepedData[i].group)
       //console.log(sweepedData[i].group)
       yGroup.map(function(ay){
-        mrs=mrs.concat([{id:nextTodoId++,
-          north: ay.northValue,
-          south: ay.southValue,
-          east: eastValue,
-          west: westValue,
-          rs:ay.rs}])
-        return 1;
+        if(ay.rs>=limit){
+          mrs=mrs.concat([{id:nextTodoId++,
+            north: ay.northValue,
+            south: ay.southValue,
+            east: eastValue,
+            west: westValue,
+            rs:ay.rs}])
+          return 1;
+        }
+
       });
 
 
@@ -226,3 +328,5 @@ export function pointToRectangle(spots, size){
   });
   return rectangles
 }
+
+export default mrs
