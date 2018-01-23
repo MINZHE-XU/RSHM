@@ -23,7 +23,13 @@ const mrs = (state =origin1, action) => {
         const rectangleRight={ north:rec.north , south:rec.south,west:rec.west, east:180, rs:rec.rs}
         return addOneSpotMRS(addOneSpotMRS( storedMRs, rectangleLeft),rectangleRight )
       }
-
+      break;
+    case 'DELETE_ONE_SPOT_MRS':
+      const rectangle2=pointToRectangle([action.spots], action.size)
+      const rec2=rectangle2[0]
+      console.log(rec2)
+      let storedMRs2=state
+      return deleteOneSpotMRS( storedMRs2, rec2)
 
       break;
 
@@ -32,13 +38,161 @@ const mrs = (state =origin1, action) => {
   }
 }
 
+export function deleteOneSpotMRS( mrs, rec){
+  let effects=searchAffectedMRsLarge(mrs, rec)
+
+  let storedMRs=effects.unAffectedMRs
+  storedMRs=storedMRs.concat(updateOverlappingDelete( effects.affectedMRs, rec ))
+  //console.log(storedMRs)
+  return storedMRs
+}
+
+
+export function updateOverlappingDelete( mrs, rec){
+  let storedMRs=[]
+  let effects=searchAffectedMRs(mrs, rec)
+
+  storedMRs=storedMRs.concat(effects.affectedMRs.map(function(mr){
+    return {north:mr.north, south:mr.south, west:mr.west, east:mr.east, rs:mr.rs-rec.rs }
+  }))
+  console.log( storedMRs)
+  console.log( effects.unAffectedMRs)
+  effects= updateOverappingNorthSouthDelete( storedMRs, effects.unAffectedMRs, rec)
+  effects= updateOverappingWestEastDelete(  effects.affectedMRs, effects.unAffectedMRs, rec)
+
+  storedMRs=effects.affectedMRs.concat(effects.unAffectedMRs)
+  //let effects= updateOverappingWestEast( mrs , rec)
+  //storedMRs=storedMRs.concat(effects.unAffectedMRs)
+
+  return storedMRs
+}
+
+//affs: the center affected mrs
+//mrs: outside border unaffected mrs
+export function updateOverappingWestEastDelete(affs, mrs, rec){
+  let GluedMRs=[]
+  let unAffectedMRs=[]
+  let centerAffs=affs
+  let stillCenter=affs
+  mrs.map(function(mr){
+    if(  rec.east<=mr.west ){
+      centerAffs=stillCenter
+      stillCenter=[]
+      centerAffs.map(function(aff, index){
+        if ( aff.north===mr.north && aff.south===mr.south &&  aff.east===mr.west && aff.rs===mr.rs){
+          GluedMRs=GluedMRs.concat([{ north:mr.north , south:mr.south, west:aff.west, east:mr.east, rs:mr.rs}])
+        }else {
+          stillCenter=stillCenter.concat([aff])
+        }
+      })
+      if(stillCenter.length===centerAffs.length){ GluedMRs=GluedMRs.concat([mr])}
+      return 1
+    }else {
+      unAffectedMRs=unAffectedMRs.concat([mr])
+    }
+    return 1
+  })
+
+    let mrss= unAffectedMRs
+    let affss= GluedMRs.concat(stillCenter)
+    GluedMRs=[]
+    unAffectedMRs=[]
+    centerAffs=affss
+    stillCenter=affss
+    mrss.map(function(mr){
+      if(  mr.east<=rec.west ){
+        centerAffs=stillCenter
+        stillCenter=[]
+        centerAffs.map(function(aff, index){
+          if (  aff.north===mr.north && aff.south===mr.south &&  aff.west===mr.east && aff.rs===mr.rs ){
+            console.log("aaaa")
+            console.log(aff)
+            console.log(mr)
+            GluedMRs=GluedMRs.concat([ { north:mr.north , south:mr.south, west:mr.west, east:aff.east, rs:mr.rs}])
+          }else {
+            stillCenter=stillCenter.concat([aff])
+          }
+        })
+        if(stillCenter.length===centerAffs.length){ GluedMRs=GluedMRs.concat([mr])}
+        return 1
+      }else {
+        unAffectedMRs=unAffectedMRs.concat([mr])
+      }
+      return 1
+    })
+
+  console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
+  return {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs }
+}
+
+//affs: the center affected mrs
+//mrs: outside border unaffected mrs
+export function updateOverappingNorthSouthDelete(affs, mrs, rec){
+  let GluedMRs=[]
+  let unAffectedMRs=[]
+  let centerAffs=affs
+  let stillCenter=affs
+  mrs.map(function(mr){
+    if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.south>=rec.north){
+      centerAffs=stillCenter
+      stillCenter=[]
+      centerAffs.map(function(aff, index){
+        if ( aff.west===mr.west && aff.east===mr.east &&  aff.north===mr.south && aff.rs===mr.rs){
+
+          GluedMRs=GluedMRs.concat([{ north:mr.north , south:aff.south, west:aff.west, east:aff.east, rs:mr.rs}])
+        }else {
+          stillCenter=stillCenter.concat([aff])
+        }
+      })
+      if(stillCenter.length===centerAffs.length){ GluedMRs=GluedMRs.concat([mr])}
+      return 1
+    }else {
+      unAffectedMRs=unAffectedMRs.concat([mr])
+    }
+    return 1
+  })
+
+    let mrss= unAffectedMRs
+    let affss= GluedMRs.concat(stillCenter)
+    GluedMRs=[]
+    unAffectedMRs=[]
+    centerAffs=affss
+    stillCenter=affss
+    mrss.map(function(mr){
+      if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.north<=rec.south){
+        centerAffs=stillCenter
+        stillCenter=[]
+        centerAffs.map(function(aff, index){
+          if ( aff.west===mr.west && aff.east===mr.east &&  aff.south===mr.north && aff.rs===mr.rs){
+            console.log("aaaa")
+            console.log(aff)
+            console.log(mr)
+            GluedMRs=GluedMRs.concat([{ north:aff.north , south:mr.south, west:aff.west, east:aff.east, rs:mr.rs}])
+          }else {
+            stillCenter=stillCenter.concat([aff])
+          }
+        })
+        if(stillCenter.length===centerAffs.length){ GluedMRs=GluedMRs.concat([mr])}
+        return 1
+      }else {
+        unAffectedMRs=unAffectedMRs.concat([mr])
+      }
+      return 1
+    })
+
+  console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
+  return {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs }
+}
+
+
+
 //cut left and right unaffected partitions first, then add rs for the overlapped partions
 export function addOneSpotMRS( mrs, rec){
   let effects=searchAffectedMRs(mrs, rec)
-  console.log( effects)
+  //console.log( effects)
   let storedMRs=effects.unAffectedMRs
   storedMRs=storedMRs.concat(updateOverlappingAdd( effects.affectedMRs, rec ))
-  console.log(storedMRs)
+  //console.log(storedMRs)
   return storedMRs
 }
 
@@ -109,53 +263,25 @@ return {affectedMRs:toDivide, unAffectedMRs:unAffectedMRs }
 
 
 
-export function searchAffectedMRsaaaaa(direction,mrs, rec){
-  console.log("direction")
-  console.log(direction)
-  console.log("mrs")
-  console.log(mrs)
-  console.log("rec")
-  console.log(rec)
-  let longitude= 0
-  if (direction==='west'){
-    longitude= rec.west;
-  }else{
-    longitude= rec.east;
-  }
-  console.log("longitude")
-  console.log(longitude)
+
+export function searchAffectedMRsLarge(mrs, rec){
+
   let affectedMRs=[]
   let unAffectedMRs=[]
   mrs.map(function(mr){
-    if (mr.west<mr.east){
-      //common case
-      if(longitude>mr.west && longitude<mr.east){
-        affectedMRs.concat([mr]);
-      }else{
-        unAffectedMRs.concat([mr]);
-      }
+    //common case
+    //!(rec.west>=mr.east || rec.east<=mr.west)
+    if(!(rec.west>mr.east || rec.east<mr.west || rec.north<mr.south || rec.south>mr.north )){
+      affectedMRs=affectedMRs.concat([mr]);
     }else{
-      //other case
-      if(longitude>mr.west || longitude<mr.east){
-        affectedMRs.concat([mr]);
-      }else{
-        unAffectedMRs.concat([mr]);
-      }
+      unAffectedMRs=unAffectedMRs.concat([mr]);
     }
   });
-  console.log (affectedMRs)
-  console.log(unAffectedMRs)
-      return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs };
+  return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs };
 }
 
-
-
-
 export function searchAffectedMRs(mrs, rec){
-  console.log("mrs")
-  console.log(mrs)
-  console.log("rec")
-  console.log(rec)
+
   let affectedMRs=[]
   let unAffectedMRs=[]
   mrs.map(function(mr){

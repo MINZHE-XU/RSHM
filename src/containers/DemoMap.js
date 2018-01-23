@@ -4,7 +4,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { addSpot,addSpotForMRs,clickListSpot,centerListSpot } from '../actions'
+import { addSpot,addSpotForMRs,deleteSpotForMRs,clickListSpot,centerListSpot } from '../actions'
 import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
 import Markers from './MarkerContainer'
 import Shades from '../components/Shades'

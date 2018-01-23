@@ -1,8 +1,8 @@
 import React from 'react'
 import  Component from 'react'
-import {bindActionCreators} from 'redux';
+import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { addSpot } from '../actions'
+import { addSpot, addSpotForMRs, deleteSpotForMRs } from '../actions'
 import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot } from '../actions'
 
 class AddSpot extends React.Component {
@@ -42,6 +42,7 @@ class AddSpot extends React.Component {
     const lngValue= (this.refs.lngInput.value.trim()==="") ? parseFloat(this.refs.lngInput.placeholder):parseFloat(this.refs.lngInput.value.trim())
     if(-90<=latValue &&latValue<=90 && -180<=lngValue && lngValue<=180){
       const r=this.props.addSpot({lat:latValue,lng:lngValue})
+      this.props.addSpotForMRs ({spots:{lat:latValue, lng:lngValue}, size:this.props.size})
       this.props.clickListSpot (r)
       this.props.centerListSpot (r)
       this.setState({ message:"added"})
@@ -57,20 +58,26 @@ class AddSpot extends React.Component {
   }
   handleDelete(e) {
     const r=this.props.deleteSpot(this.props.statusPoint.clicked)
+    this.props.deleteSpotForMRs({spots:this.props.statusPoint.clicked, size:this.props.size})
+
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
   }
   handleDeleteAll(e) {
     const r=this.props.deleteAllSpot()
+
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
   }
 }
 const mapStateToProps = (state) => ({
-  statusPoint:state.statusPoint
+  statusPoint:state.statusPoint,
+  size:state.size
 })
 const mapDispatchToProps = {
   deleteSpot: deleteSpot,
+  addSpotForMRs: addSpotForMRs,
+  deleteSpotForMRs: deleteSpotForMRs,
   deleteAllSpot: deleteAllSpot,
   clickListSpot: clickListSpot,
   centerListSpot: centerListSpot,

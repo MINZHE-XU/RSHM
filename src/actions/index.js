@@ -41,3 +41,8 @@ export function addSpotForMRs(payload) {
   console.log(payload)
   return { type:'ADD_ONE_SPOT_MRS' ,spots: payload.spots,size:payload.size }
 }
+
+export function deleteSpotForMRs(payload) {
+  console.log(payload)
+  return { type:'DELETE_ONE_SPOT_MRS' ,spots: payload.spots,size:payload.size }
+}
