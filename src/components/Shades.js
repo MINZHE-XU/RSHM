@@ -19,7 +19,7 @@ class Shades extends React.Component {
       this.props.spots.map((spot) =>
         <Rectangle
         key={spot.id}
-        visible={this.props.mode==="point"}
+        visible={this.props.mode.show==="point"}
                 bounds= {{
                   north: spot.lat+this.props.size.height/2,
                   south: spot.lat-this.props.size.height/2,

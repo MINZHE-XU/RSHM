@@ -29,8 +29,11 @@ export function changeSize(payload) {
   return { type:'CHANGE_SIZE' ,length: payload.length, height:payload.height}
 }
 
-export function changeMode() {
-  return { type:'CHANGE_MODE' }
+export function changeShowMode() {
+  return { type:'CHANGE_SHOW_MODE' }
+}
+export function changeAlgorithmMode() {
+  return { type:'CHANGE_ALGORITHM_MODE' }
 }
 
 export function updateMRs(payload) {
@@ -45,4 +48,8 @@ export function addSpotForMRs(payload) {
 export function deleteSpotForMRs(payload) {
   console.log(payload)
   return { type:'DELETE_ONE_SPOT_MRS' ,spots: payload.spots,size:payload.size }
+}
+export function resetMRs(payload) {
+  console.log(payload)
+  return { type:'RESET_MRS'  }
 }

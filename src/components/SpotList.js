@@ -16,6 +16,10 @@ export default class SpotList extends React.Component {
           onClick={() => this.props.clickListSpot(spot)}
           buttomOnClick={() => {
             const r=this.props.deleteSpot(spot)
+            if(this.props.mode.algorithm==='local'){
+                this.props.deleteSpotForMRs({spots:spot, size:this.props.size})
+            }
+
             this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
             this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
           }}

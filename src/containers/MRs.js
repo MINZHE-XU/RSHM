@@ -20,7 +20,7 @@ class MRs extends React.Component {
       this.props.mrs.map((mr, index) =>
         <Rectangle
         key={index}
-        visible={this.props.mode==="rectangle"}
+        visible={true}
                 bounds= {{
                   north: mr.north,
                   south: mr.south,
@@ -31,6 +31,7 @@ class MRs extends React.Component {
                   fillOpacity: mr.rs * 0.1,
                   draggable: false,
                   editable: false,
+                  clickable: this.props.mode.show==="rectangle",
                   fillColor:(this.state.coloredID===index) ? "red" : "black" ,
                   strokeColor: (this.state.coloredID===index) ? "red" : "black"
                   }

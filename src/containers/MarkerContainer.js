@@ -20,7 +20,7 @@ class Markers extends React.Component {
       this.props.spots.map((spot) =>
       <Marker position={{ lat: spot.lat, lng: spot.lng}}
         key={spot.id}
-        visible={this.props.mode==="point"}
+        visible={this.props.mode.show==="point"}
         //http://kml4earth.appspot.com/icons.html
         //is center
         icon={  (spot.lat===this.props.statusPoint.clicked.lat && spot.lng===this.props.statusPoint.clicked.lng)?

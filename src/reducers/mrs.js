@@ -4,7 +4,9 @@ const origin1=[{id:0, north:90, south:-90,west:-180, east:180,rs:0}]
 const mrs = (state =origin1, action) => {
   switch (action.type) {
     case 'FULLY_UPDATE_MRS':
+    console.log(action)
       const rectangles=pointToRectangle(action.spots, action.size)
+      console.log(rectangles)
       const sweepedData=sweepRectangle(rectangles)
       const sweepedMRs=sweepedDataToRectangle(sweepedData,0)
       return sweepedMRs
@@ -29,8 +31,16 @@ const mrs = (state =origin1, action) => {
       const rec2=rectangle2[0]
       console.log(rec2)
       let storedMRs2=state
-      return deleteOneSpotMRS( storedMRs2, rec2)
-
+      if (rec2.west<rec2.east){
+        return deleteOneSpotMRS( storedMRs2, rec2)
+      }else{
+        const rectangleLeft1={ north:rec2.north , south:rec2.south,west:-180, east:rec2.east, rs:rec2.rs}
+        const rectangleRight1={ north:rec2.north , south:rec2.south,west:rec2.west, east:180, rs:rec2.rs}
+        return deleteOneSpotMRS(deleteOneSpotMRS( storedMRs2, rectangleLeft1),rectangleRight1 )
+      }
+      break;
+    case 'RESET_MRS':
+      return origin1
       break;
 
     default:
