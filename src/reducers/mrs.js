@@ -65,11 +65,14 @@ export function updateOverlappingDelete( mrs, rec){
   storedMRs=storedMRs.concat(effects.affectedMRs.map(function(mr){
     return {north:mr.north, south:mr.south, west:mr.west, east:mr.east, rs:mr.rs-rec.rs }
   }))
+  //inside changed rectangles
   console.log( storedMRs)
+  //outside unaffected
   console.log( effects.unAffectedMRs)
-  effects= updateOverappingNorthSouthDelete( storedMRs, effects.unAffectedMRs, rec)
+  //cut vertically
+  effects= cutVertically(storedMRs, effects.unAffectedMRs, rec)
+  effects= updateOverappingNorthSouthDelete( storedMRs,  effects.unAffectedMRs, rec)
   effects= updateOverappingWestEastDelete(  effects.affectedMRs, effects.unAffectedMRs, rec)
-
   storedMRs=effects.affectedMRs.concat(effects.unAffectedMRs)
   //let effects= updateOverappingWestEast( mrs , rec)
   //storedMRs=storedMRs.concat(effects.unAffectedMRs)
@@ -77,6 +80,99 @@ export function updateOverlappingDelete( mrs, rec){
   return storedMRs
 }
 
+
+//affs: the center affected mrs
+//mrs: outside border unaffected mrs
+export function cutVertically(affs, mrs, rec){
+  let northMRs=[]
+  let southMRs=[]
+  let lrMRs=[]
+  let centerAffs=affs
+  let stillCenter=affs
+  mrs.map(function(mr){
+    let mrX=[]
+
+    if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.south>=rec.north){
+      centerAffs=stillCenter
+      stillCenter=[]
+
+      centerAffs.map(function(aff, index){
+
+        //have overlapping area
+        //then consider consider center
+
+        //       |               |  aff
+        //           |     ?     mr
+       if ( aff.west<mr.west && mr.west< aff.east &&  mr.north===aff.south && mr.rs===aff.rs ){
+
+           if ( aff.west<mr.east && mr.east< aff.east &&  mr.north===aff.south && mr.rs===aff.rs ){
+             //       |               |  aff
+             //           |     |     mr
+             stillCenter=stillCenter.concat([
+               { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.west, east:mr.east, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
+           }else{
+             //       |               |  aff
+             //           |                    |     mr
+             stillCenter=stillCenter.concat([
+               { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.west, east:aff.east, rs:aff.rs}])
+           }
+
+           //       |               |  aff
+           //    |     ?     mr
+       }else if(aff.west>=mr.west &&  mr.north===aff.south && mr.rs===aff.rs ){
+         if ( aff.west<mr.east && mr.east< aff.east &&  mr.north===aff.south && mr.rs===aff.rs ){
+           //         |             |  aff
+           //     |      |     mr
+           stillCenter=stillCenter.concat([
+             { north:aff.north , south:aff.south, west:aff.west, east:mr.east, rs:aff.rs},
+             { north:aff.north , south:aff.south, west:mr.west, east:aff.east, rs:aff.rs}])
+         }else{
+           //                |         |  aff
+           //           |                    |     mr
+           stillCenter=stillCenter.concat([aff])
+         }
+       }else {
+         //nothing changes, donnot have relationships
+         stillCenter=stillCenter.concat([aff])
+       }
+
+
+       //have overlapping area
+       //first consider MR
+
+      if ( mr.west<aff.west && aff.west< mr.east &&  aff.north===mr.south && aff.rs===mr.rs ){
+        mrX = mrX.concat([aff.west])
+      }
+      if ( mr.west<aff.east && aff.east< mr.east  &&  aff.north===mr.south && aff.rs===mr.rs ){
+        mrX = mrX.concat([aff.east])
+      }
+
+      return 1
+      })
+      mrX = mrX.concat([mr.east,mr.west ])
+      mrX =Array.from(new Set(mrX));
+      mrX.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
+
+      console.log("mrX ")
+      console.log(mrX )
+      for (let i=0; i<mrX.length-1;i++){
+        northMRs=northMRs.concat([{ north:mr.north , south:mr.south, west:mrX[i], east:mrX[i+1], rs:mr.rs}])
+      }
+
+    }else if(rec.west<=mr.west && mr.east<=rec.east &&  mr.north<=rec.south){
+      southMRs=southMRs.concat([mr])
+    }else{
+      lrMRs=lrMRs.concat([mr])
+    }
+    return 1
+  })
+
+
+  return {affectedMRs:affs, unAffectedMRs:northMRs.concat(southMRs).concat(lrMRs)}
+}
 //affs: the center affected mrs
 //mrs: outside border unaffected mrs
 export function updateOverappingWestEastDelete(affs, mrs, rec){
@@ -115,9 +211,9 @@ export function updateOverappingWestEastDelete(affs, mrs, rec){
         stillCenter=[]
         centerAffs.map(function(aff, index){
           if (  aff.north===mr.north && aff.south===mr.south &&  aff.west===mr.east && aff.rs===mr.rs ){
-            console.log("aaaa")
-            console.log(aff)
-            console.log(mr)
+            //console.log("aaaa")
+            //console.log(aff)
+            //console.log(mr)
             GluedMRs=GluedMRs.concat([ { north:mr.north , south:mr.south, west:mr.west, east:aff.east, rs:mr.rs}])
           }else {
             stillCenter=stillCenter.concat([aff])
@@ -174,9 +270,9 @@ export function updateOverappingNorthSouthDelete(affs, mrs, rec){
         stillCenter=[]
         centerAffs.map(function(aff, index){
           if ( aff.west===mr.west && aff.east===mr.east &&  aff.south===mr.north && aff.rs===mr.rs){
-            console.log("aaaa")
-            console.log(aff)
-            console.log(mr)
+            //console.log("aaaa")
+            //console.log(aff)
+            //console.log(mr)
             GluedMRs=GluedMRs.concat([{ north:aff.north , south:mr.south, west:aff.west, east:aff.east, rs:mr.rs}])
           }else {
             stillCenter=stillCenter.concat([aff])
