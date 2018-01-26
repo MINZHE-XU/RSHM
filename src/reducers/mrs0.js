@@ -90,144 +90,89 @@ export function cutVertically(affs, mrs, rec){
   let lrMRs=[]
   let centerAffs=affs
   let stillCenter=affs
+  let mrX=[]
 
-// cut center rectangles
-    mrs.map(function(mr, index){
+  mrs.map(function(mr, index){
+    mrX=[]
+    if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.south>=rec.north){
       centerAffs=stillCenter
       stillCenter=[]
       centerAffs.map(function(aff){
-        if(rec.west<=mr.west && mr.east<=rec.east &&  mr.south>=rec.north){
-          if ( aff.west<mr.west && mr.west< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
-                if ( aff.west<mr.east && mr.east< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
-                  //       |               |  aff
-                  //           |     |     mr
-                  stillCenter=stillCenter.concat([
-                    { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.west, east:mr.east, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
-                }else{
-                  //       |               |  aff
-                  //           |                    |     mr
-                  stillCenter=stillCenter.concat([
-                    { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.west, east:aff.east, rs:aff.rs}])
-                }
 
-                //       |               |  aff
-                //    |     ?     mr
-            }else if(aff.west>=mr.west &&  mr.south===aff.north && mr.rs===aff.rs ){
-              if ( aff.west<mr.east && mr.east< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
-                //         |             |  aff
-                //     |      |     mr
-                stillCenter=stillCenter.concat([
-                  { north:aff.north , south:aff.south, west:aff.west, east:mr.east, rs:aff.rs},
-                  { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
-              }else{
-                //                |         |  aff
-                //           |                    |     mr
-                stillCenter=stillCenter.concat([aff])
-              }
-            }else {
-              //nothing changes, donnot have relationships
-              stillCenter=stillCenter.concat([aff])
-            }
-        }
+        //have overlapping area
+        //then consider consider center
 
         //       |               |  aff
         //           |     ?     mr
-        else if(rec.west<=mr.west && mr.east<=rec.east &&  mr.north<=rec.south){
-          if ( aff.west<mr.west && mr.west< aff.east &&  mr.north===aff.south && mr.rs===aff.rs ){
-                if ( aff.west<mr.east && mr.east< aff.east &&   mr.north===aff.south && mr.rs===aff.rs ){
-                  //       |               |  aff
-                  //           |     |     mr
-                  stillCenter=stillCenter.concat([
-                    { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.west, east:mr.east, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
-                }else{
-                  //       |               |  aff
-                  //           |                    |     mr
-                  stillCenter=stillCenter.concat([
-                    { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
-                    { north:aff.north , south:aff.south, west:mr.west, east:aff.east, rs:aff.rs}])
-                }
+       if ( aff.west<mr.west && mr.west< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
 
-                //       |               |  aff
-                //    |     ?     mr
-            }else if(aff.west>=mr.west &&   mr.north===aff.south && mr.rs===aff.rs ){
-              if ( aff.west<mr.east && mr.east< aff.east &&   mr.north===aff.south  && mr.rs===aff.rs ){
-                //         |             |  aff
-                //     |      |     mr
-                stillCenter=stillCenter.concat([
-                  { north:aff.north , south:aff.south, west:aff.west, east:mr.east, rs:aff.rs},
-                  { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
-              }else{
-                //                |         |  aff
-                //           |                    |     mr
-                stillCenter=stillCenter.concat([aff])
-              }
-            }else {
-              //nothing changes, donnot have relationships
-              stillCenter=stillCenter.concat([aff])
-            }
-        }else{
-          stillCenter=stillCenter.concat([aff])
-        }
-      return 1
-      })
-    return 1
-  })
-//  done  cut center retangles
-centerAffs=stillCenter
-let mrX=[]
-mrs.map(function(mr, index){
-  mrX=[]
-  if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.south>=rec.north){
-  centerAffs.map(function(aff){
-  if ( mr.west<aff.west && aff.west< mr.east &&  aff.north===mr.south && aff.rs===mr.rs ){
-    mrX = mrX.concat([aff.west])
-  }
-  if ( mr.west<aff.east && aff.east< mr.east  &&  aff.north===mr.south && aff.rs===mr.rs ){
-    mrX = mrX.concat([aff.east])
-  }
-  return 1
-  })
+           if ( aff.west<mr.east && mr.east< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
+             //       |               |  aff
+             //           |     |     mr
+             stillCenter=stillCenter.concat([
+               { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.west, east:mr.east, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
+           }else{
+             //       |               |  aff
+             //           |                    |     mr
+             stillCenter=stillCenter.concat([
+               { north:aff.north , south:aff.south, west:aff.west, east:mr.west, rs:aff.rs},
+               { north:aff.north , south:aff.south, west:mr.west, east:aff.east, rs:aff.rs}])
+           }
 
-  mrX = mrX.concat([mr.east,mr.west ])
-  mrX =Array.from(new Set(mrX));
-  mrX.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
+           //       |               |  aff
+           //    |     ?     mr
+       }else if(aff.west>=mr.west &&  mr.south===aff.north && mr.rs===aff.rs ){
+         if ( aff.west<mr.east && mr.east< aff.east &&  mr.south===aff.north && mr.rs===aff.rs ){
+           //         |             |  aff
+           //     |      |     mr
+           stillCenter=stillCenter.concat([
+             { north:aff.north , south:aff.south, west:aff.west, east:mr.east, rs:aff.rs},
+             { north:aff.north , south:aff.south, west:mr.east, east:aff.east, rs:aff.rs}])
+         }else{
+           //                |         |  aff
+           //           |                    |     mr
+           stillCenter=stillCenter.concat([aff])
+         }
+       }else {
+         //nothing changes, donnot have relationships
+         stillCenter=stillCenter.concat([aff])
+       }
 
-  for (let i=0; i<mrX.length-1;i++){
-    northMRs=northMRs.concat([{ north:mr.north , south:mr.south, west:mrX[i], east:mrX[i+1], rs:mr.rs}])
-  }
-}else if(  rec.west<=mr.west && mr.east<=rec.east &&  mr.north<=rec.south){
-      centerAffs.map(function(aff){
-      if ( mr.west<aff.west && aff.west< mr.east &&  aff.south===mr.north && aff.rs===mr.rs ){
+       //have overlapping area
+       //first consider MR
+
+      if ( mr.west<aff.west && aff.west< mr.east &&  aff.north===mr.south && aff.rs===mr.rs ){
         mrX = mrX.concat([aff.west])
       }
-      if ( mr.west<aff.east && aff.east< mr.east  &&  aff.south===mr.north && aff.rs===mr.rs ){
+      if ( mr.west<aff.east && aff.east< mr.east  &&  aff.north===mr.south && aff.rs===mr.rs ){
         mrX = mrX.concat([aff.east])
       }
+
       return 1
       })
+      console.log("mr")
+      console.log(mr )
+      console.log("stillCenter")
+      console.log(stillCenter )
+
 
       mrX = mrX.concat([mr.east,mr.west ])
       mrX =Array.from(new Set(mrX));
       mrX.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
 
+      console.log("mrX ")
+      console.log(mrX )
       for (let i=0; i<mrX.length-1;i++){
         northMRs=northMRs.concat([{ north:mr.north , south:mr.south, west:mrX[i], east:mrX[i+1], rs:mr.rs}])
       }
-  }else{
-    lrMRs=lrMRs.concat([mr])
-  }
 
-  return 1
-})
+    }
+    return 1
+  })
 
 
-
-//northMRs.concat(southMRs).concat(lrMRs)
   return {affectedMRs:stillCenter, unAffectedMRs:northMRs.concat(southMRs).concat(lrMRs)}
 }
 //affs: the center affected mrs
