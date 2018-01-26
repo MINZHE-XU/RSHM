@@ -53,11 +53,7 @@ export function deleteOneSpotMRS( mrs, rec){
 
   let storedMRs=effects.unAffectedMRs
   storedMRs=storedMRs.concat(updateOverlappingDelete( effects.affectedMRs, rec ))
-
-// here is to handle very outside not overlapping MRs
-  effects= updateOverappingWestEastDelete( effects.affectedMRsOutside,effects.unAffectedMRsOutside, {north:90,south:-90,west:rec.west,east:rec.east} )
-  storedMRs=storedMRs.concat(effects.unAffectedMRs).concat(effects.affectedMRs)
-
+  //console.log(storedMRs)
   return storedMRs
 }
 
@@ -70,9 +66,9 @@ export function updateOverlappingDelete( mrs, rec){
     return {north:mr.north, south:mr.south, west:mr.west, east:mr.east, rs:mr.rs-rec.rs }
   }))
   //inside changed rectangles
-  //console.log( storedMRs)
+  console.log( storedMRs)
   //outside unaffected
-  //console.log( effects.unAffectedMRs)
+  console.log( effects.unAffectedMRs)
   //cut vertically
   effects= cutVertically(storedMRs, effects.unAffectedMRs, rec)
   effects= updateOverappingNorthSouthDelete( effects.affectedMRs,  effects.unAffectedMRs, rec)
@@ -218,6 +214,7 @@ mrs.map(function(mr, index){
       mrX = mrX.concat([mr.east,mr.west ])
       mrX =Array.from(new Set(mrX));
       mrX.sort(function (x, y) {if (x < y) {return -1;}if (x > y) {return 1;}return 0;});
+
       for (let i=0; i<mrX.length-1;i++){
         northMRs=northMRs.concat([{ north:mr.north , south:mr.south, west:mrX[i], east:mrX[i+1], rs:mr.rs}])
       }
@@ -270,7 +267,6 @@ export function updateOverappingWestEastDelete(affs, mrs, rec){
         centerAffs=stillCenter
         stillCenter=[]
         centerAffs.map(function(aff, index){
-
           if (  aff.north===mr.north && aff.south===mr.south &&  aff.west===mr.east && aff.rs===mr.rs ){
             //console.log("aaaa")
             //console.log(aff)
@@ -435,26 +431,16 @@ export function searchAffectedMRsLarge(mrs, rec){
 
   let affectedMRs=[]
   let unAffectedMRs=[]
-  let affectedMRsOutside=[]
-  let unAffectedMRsOutside=[]
   mrs.map(function(mr){
     //common case
     //!(rec.west>=mr.east || rec.east<=mr.west)
     if(!(rec.west>mr.east || rec.east<mr.west || rec.north<mr.south || rec.south>mr.north )){
       affectedMRs=affectedMRs.concat([mr]);
     }else{
-      if (rec.west===mr.west || rec.east===mr.east){
-        affectedMRsOutside=affectedMRsOutside.concat([mr]);
-      }else if(rec.west===mr.east || rec.east===mr.west){
-        unAffectedMRsOutside=unAffectedMRsOutside.concat([mr]);
-      }else{
-        unAffectedMRs=unAffectedMRs.concat([mr]);
-      }
+      unAffectedMRs=unAffectedMRs.concat([mr]);
     }
   });
-  affectedMRsOutside=Array.from(new Set(affectedMRsOutside));
-
-  return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs, affectedMRsOutside:affectedMRsOutside, unAffectedMRsOutside:unAffectedMRsOutside};
+  return {affectedMRs:affectedMRs, unAffectedMRs:unAffectedMRs };
 }
 
 export function searchAffectedMRs(mrs, rec){
