@@ -3,7 +3,7 @@ import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import SpotList from '../components/SpotList'
-import { clickListSpot,centerListSpot,deleteSpot,deleteSpotForMRs } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteSpotForMRs,  deletePath} from '../actions'
 
 
 
@@ -18,7 +18,8 @@ const mapStateToProps = (state) => ({
    centerListSpot: centerListSpot,
    clickListSpot: clickListSpot,
    deleteSpotForMRs: deleteSpotForMRs,
-   deleteSpot:deleteSpot
+   deleteSpot:deleteSpot,
+   deletePath:deletePath
  }
 
 export default connect( mapStateToProps,mapDispatchToProps )(SpotList);

@@ -54,6 +54,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   centerListSpot: centerListSpot,
   clickListSpot:clickListSpot
+
 }
 
 

@@ -6,7 +6,7 @@ const mrs = (state =origin1, action) => {
     case 'FULLY_UPDATE_MRS':
     console.log(action)
       const rectangles=pointToRectangle(action.spots, action.size)
-      console.log(rectangles)
+      //console.log(rectangles)
       const sweepedData=sweepRectangle(rectangles)
       const sweepedMRs=sweepedDataToRectangle(sweepedData,0)
       return sweepedMRs
@@ -15,7 +15,7 @@ const mrs = (state =origin1, action) => {
       console.log(action)
       const rectangle1=pointToRectangle([action.spots], action.size)
       const rec=rectangle1[0]
-      console.log(rec)
+      //console.log(rec)
       let storedMRs=state
       if (rec.west<rec.east){
         return addOneSpotMRS( storedMRs, rec)
@@ -29,7 +29,7 @@ const mrs = (state =origin1, action) => {
     case 'DELETE_ONE_SPOT_MRS':
       const rectangle2=pointToRectangle([action.spots], action.size)
       const rec2=rectangle2[0]
-      console.log(rec2)
+      //console.log(rec2)
       let storedMRs2=state
       if (rec2.west<rec2.east){
         return deleteOneSpotMRS( storedMRs2, rec2)
@@ -288,7 +288,7 @@ export function updateOverappingWestEastDelete(affs, mrs, rec){
       return 1
     })
 
-  console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
+  //console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
   return {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs }
 }
 
@@ -347,7 +347,7 @@ export function updateOverappingNorthSouthDelete(affs, mrs, rec){
       return 1
     })
 
-  console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
+  //console.log( {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs })
   return {affectedMRs:GluedMRs.concat(stillCenter), unAffectedMRs:unAffectedMRs }
 }
 

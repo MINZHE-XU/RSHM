@@ -4,13 +4,15 @@ import statusPoint from './statusPoint'
 import mode from './mode'
 import size from './size'
 import mrs from './mrs'
+import path from './path'
 
 const todoApp = combineReducers({
   spots,
   statusPoint,
   size,
   mode,
-  mrs
+  mrs,
+  path
 })
 
 export default todoApp

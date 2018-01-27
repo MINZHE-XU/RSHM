@@ -3,7 +3,7 @@ import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath } from '../actions'
 
 class AddSpot extends React.Component {
   constructor() {
@@ -48,7 +48,7 @@ class AddSpot extends React.Component {
     const lngValue= (this.refs.lngInput.value.trim()==="") ? parseFloat(this.refs.lngInput.placeholder):parseFloat(this.refs.lngInput.value.trim())
     if(-90<=latValue &&latValue<=90 && -180<=lngValue && lngValue<=180){
       let temp=this.props.spots;
-      const r=this.props.addSpot({lat:latValue,lng:lngValue})
+      const r=this.props.addSpot({id:-1,lat:latValue,lng:lngValue,isDynamic:false})
       if(this.props.mode.algorithm==='local'){
         this.props.addSpotForMRs ({spots:{lat:latValue, lng:lngValue}, size:this.props.size})
       }else{
@@ -71,6 +71,7 @@ class AddSpot extends React.Component {
 
   handleDelete(e) {
     const r=this.props.deleteSpot(this.props.statusPoint.clicked)
+    this.props.deletePath(this.props.statusPoint.clicked)
 
     if(this.props.mode.algorithm==='local'){
       this.props.deleteSpotForMRs({spots:this.props.statusPoint.clicked, size:this.props.size})
@@ -82,6 +83,7 @@ class AddSpot extends React.Component {
   }
   handleDeleteAll(e) {
     const r=this.props.deleteAllSpot()
+    this.props.deleteAllPath()
     this.props.resetMRs()
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
@@ -94,6 +96,7 @@ const mapStateToProps = (state) => ({
   spots:state.spots
 })
 const mapDispatchToProps = {
+  addSpot: addSpot,
   deleteSpot: deleteSpot,
   resetMRs:resetMRs,
   addSpotForMRs: addSpotForMRs,
@@ -102,6 +105,8 @@ const mapDispatchToProps = {
   deleteAllSpot: deleteAllSpot,
   clickListSpot: clickListSpot,
   centerListSpot: centerListSpot,
-  addSpot: addSpot
+  deletePath:deletePath,
+  deleteAllPath:deleteAllPath
+
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);

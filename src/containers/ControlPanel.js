@@ -2,7 +2,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs } from '../actions'
+import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep } from '../actions'
 
 class ControlPanel extends React.Component {
   constructor() {
@@ -24,6 +24,9 @@ class ControlPanel extends React.Component {
         <button onClick={(e) => this.handleUpdate(e)}>
           updateMRs
         </button>
+        <button onClick={(e) => this.handleMoveOneStep(e)}>
+          move one step
+        </button>
       </div>
     )
   }
@@ -40,16 +43,16 @@ class ControlPanel extends React.Component {
           this.props.addSpotForMRs ({spots:this.props.spots[i], size:this.props.size})
         }
       }
-
     }else{
       this.props.updateMRs({spots:this.props.spots, size:this.props.size});
     }
-
-
   }
 
   handleUpdate(e) {
     this.props.updateMRs({spots:this.props.spots, size:this.props.size} );
+  }
+  handleMoveOneStep(e) {
+    this.props.moveOneStep({size:this.props.size});
   }
 }
 const mapStateToProps = (state) => ({
@@ -65,6 +68,7 @@ const mapDispatchToProps = {
   changeAlgorithmMode: changeAlgorithmMode,
   deleteAllSpot:deleteAllSpot,
   resetMRs:resetMRs,
-  updateMRs: updateMRs
+  updateMRs: updateMRs,
+  moveOneStep:moveOneStep
 }
 export default connect( mapStateToProps,mapDispatchToProps)(ControlPanel);

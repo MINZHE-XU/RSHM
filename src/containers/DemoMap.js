@@ -5,10 +5,12 @@ import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot,addSpotForMRs,deleteSpotForMRs,clickListSpot,centerListSpot,updateMRs } from '../actions'
-import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle  } from "react-google-maps"
+import { GroundOverlay, withScriptjs, withGoogleMap, GoogleMap, Marker, Rectangle ,DrawingManager } from "react-google-maps"
 import Markers from './MarkerContainer'
+import PolylineContainer from './PolylineContainer'
 import Shades from '../components/Shades'
 import MRs from './MRs'
+import DrawingManagers from './DrawingManagers'
 
 class DemoMap extends React.PureComponent {
   constructor() {
@@ -19,7 +21,7 @@ class DemoMap extends React.PureComponent {
   }
   handleMapClick = (e) => {
     if (this.props.mode.show==="point"){
-      const payload= {lat: e.latLng.lat(),lng:e.latLng.lng()}
+      const payload= {id:-1,lat: e.latLng.lat(),lng:e.latLng.lng(),isDynamic:false}
       const r=this.props.addSpot (payload)
       //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
       if(this.props.mode.algorithm==='local'){
@@ -66,8 +68,9 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
     onZoomChanged={props.onZoomChanged}
   >
   <Markers />
-
+  <DrawingManagers  />
   <MRs />
+  <PolylineContainer />
   </GoogleMap>
 ))
 
