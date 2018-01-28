@@ -28,7 +28,7 @@ class MRs extends React.Component {
                   west: mr.west
                 }}
                 options={{strokeWeight: (this.state.coloredID===mr.id) ? 1 : 0.1 ,
-                  fillOpacity: mr.rs * 0.1,
+                  fillOpacity:  mr.rs * 0.1,
                   draggable: false,
                   editable: false,
                   clickable: this.props.mode.show==="rectangle",

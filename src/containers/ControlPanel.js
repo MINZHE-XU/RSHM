@@ -1,8 +1,10 @@
 import React from 'react'
+
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep } from '../actions'
+
 
 class ControlPanel extends React.Component {
   constructor() {
@@ -27,6 +29,12 @@ class ControlPanel extends React.Component {
         <button onClick={(e) => this.handleMoveOneStep(e)}>
           move one step
         </button>
+        <button
+        onMouseDown={(e) => this.handleOnPressIn(e)}
+        onMouseUp={(e) => this.handleOnPressOut(e)}>
+          keep moving
+        </button>
+
       </div>
     )
   }
@@ -54,7 +62,18 @@ class ControlPanel extends React.Component {
   handleMoveOneStep(e) {
     this.props.moveOneStep({size:this.props.size});
   }
+  handleOnPressIn(e) {
+    this.interval = setInterval(() => this.props.moveOneStep({size:this.props.size}) , 100);
+  }
+
+  handleOnPressOut(e) {
+    clearInterval(this.interval);
+  }
+
 }
+
+
+
 const mapStateToProps = (state) => ({
     spots:state.spots,
     size:state.size,

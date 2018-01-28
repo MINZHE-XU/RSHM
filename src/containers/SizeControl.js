@@ -2,7 +2,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { changeSize,resetMRs,deleteAllSpot } from '../actions'
+import { changeSize,resetMRs,deleteAllSpot,deleteAllPath } from '../actions'
 
 
 class SizeControl extends React.Component {
@@ -37,6 +37,7 @@ class SizeControl extends React.Component {
     if(0<lengthValue && lengthValue<=360 && 0<heightValue && heightValue<=180 ){
       const r=this.props.changeSize({length:lengthValue,height:heightValue})
       this.props.deleteAllSpot()
+      this.props.deleteAllPath()
       this.props.resetMRs()
 
       this.setState({ message:"changed"})
@@ -56,6 +57,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   changeSize: changeSize,
   resetMRs:resetMRs,
-  deleteAllSpot:deleteAllSpot
+  deleteAllSpot:deleteAllSpot,
+  deleteAllPath:deleteAllPath
 }
 export default connect( mapStateToProps,mapDispatchToProps)(SizeControl);

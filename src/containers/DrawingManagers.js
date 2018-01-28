@@ -30,8 +30,8 @@ class DrawingManagers extends React.Component {
              polylineOptions: {
                //this.props.mode.show==="point"
                visible: false ,
-               strokeWeight: 0.5,
-               strokeColor:'white',
+               strokeWeight: 2,
+               strokeColor:'yellow',
                zIndex:-2
              },
            }}
