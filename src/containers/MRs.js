@@ -16,6 +16,9 @@ class MRs extends React.Component {
   }
 
   render() {
+    let maxMR=10
+      this.props.mrs.map((mr, index) =>{if( mr.rs>maxMR){maxMR= mr.rs}})
+
     return (
       this.props.mrs.map((mr, index) =>
         <Rectangle
@@ -28,7 +31,7 @@ class MRs extends React.Component {
                   west: mr.west
                 }}
                 options={{strokeWeight: (this.state.coloredID===mr.id) ? 1 : 0.1 ,
-                  fillOpacity:  mr.rs * 0.1,
+                  fillOpacity:  mr.rs /maxMR,
                   draggable: false,
                   editable: false,
                   clickable: this.props.mode.show==="rectangle",

@@ -69,6 +69,7 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
   >
   <Markers />
   <DrawingManagers  />
+
   <MRs />
   <PolylineContainer />
   </GoogleMap>

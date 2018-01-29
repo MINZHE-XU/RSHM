@@ -24,6 +24,7 @@ class DrawingManagers extends React.Component {
              drawingControlOptions: {
                position: google.maps.ControlPosition.TOP_RIGHT,
                drawingModes: [
+                 google.maps.drawing.OverlayType.POLYLINE,
                  google.maps.drawing.OverlayType.POLYLINE
                ],
              },

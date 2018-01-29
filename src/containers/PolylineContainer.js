@@ -17,11 +17,11 @@ class PolylineContainer extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("this.props.path")
-    console.log(this.props.path)
+    //console.log("this.props.path")
+    //console.log(this.props.path)
     if  (this.props.path!==nextProps.path){
-      console.log("stored path")
-      console.log(nextProps.path)
+      //console.log("stored path")
+      //console.log(nextProps.path)
       const currentSpotToSearch =  this.props.spots
       nextProps.path.map(function(apath, index){
         let indexToDelete = currentSpotToSearch.findIndex(
@@ -47,7 +47,7 @@ class PolylineContainer extends React.Component {
               nextProps.addSpotForMRs ({spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:nextProps.size})
             }
           }else{
-            console.log("the same!!!!!!!!!!!!!!")
+            //console.log("the same!!!!!!!!!!!!!!")
           }
 
         }else{
