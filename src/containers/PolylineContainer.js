@@ -47,7 +47,7 @@ class PolylineContainer extends React.Component {
               nextProps.addSpotForMRs ({spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:nextProps.size})
             }
           }else{
-            //console.log("the same!!!!!!!!!!!!!!")
+            console.log("the same!!!!!!!!!!!!!!")
           }
 
         }else{

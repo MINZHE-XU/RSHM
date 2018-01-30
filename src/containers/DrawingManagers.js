@@ -4,7 +4,7 @@ import React from 'react'
 import {  GoogleMap } from "react-google-maps"
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
-import { addOnePath } from '../actions'
+import { addOnePath ,addSpot,addSpotForMRs,updateMRs,clickListSpot ,centerListSpot } from '../actions'
 const { DrawingManager } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
 class DrawingManagers extends React.Component {
@@ -24,7 +24,7 @@ class DrawingManagers extends React.Component {
              drawingControlOptions: {
                position: google.maps.ControlPosition.TOP_RIGHT,
                drawingModes: [
-                 google.maps.drawing.OverlayType.POLYLINE,
+                 google.maps.drawing.OverlayType.MARKER,
                  google.maps.drawing.OverlayType.POLYLINE
                ],
              },
@@ -35,7 +35,12 @@ class DrawingManagers extends React.Component {
                strokeColor:'yellow',
                zIndex:-2
              },
+             markerOptions: {
+               //this.props.mode.show==="point"
+               visible: false
+             },
            }}
+           onMarkerComplete={this.handleMarkerComplete}
            onPolylineComplete={this.handlePolylineComplete}
          />
 
@@ -43,18 +48,37 @@ class DrawingManagers extends React.Component {
   }
 
   handlePolylineComplete= (e) => {
-
     console.log(e.getPath().b)
-    //let mm=e.getPath().b
-    //let aaa={position: new google.maps.LatLng(mm[0][0], mm[0][1])}
-    //console.log(aaa)
     this.props.addOnePath( {path:e.getPath().b})
+  }
+  handleMarkerComplete= (e) => {
+    console.log(e.position)
+
+      if (this.props.mode.show==="point"){
+        const payload= {id:-1,lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
+        const r=this.props.addSpot (payload)
+        //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
+        if(this.props.mode.algorithm==='local'){
+          this.props.addSpotForMRs ({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
+        }else{
+          this.props.updateMRs({size:this.props.size});
+        }
+        this.props.clickListSpot (r)
+        this.props.centerListSpot (r)
+      }
 
   }
 
 }
 const mapDispatchToProps = {
-  addOnePath:addOnePath
+  addOnePath:addOnePath,
+  addSpot:addSpot,
+  addSpotForMRs:addSpotForMRs,
+  updateMRs:updateMRs,
+  clickListSpot :clickListSpot ,
+  centerListSpot:centerListSpot
+
+
 
 }
 

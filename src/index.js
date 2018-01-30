@@ -9,7 +9,7 @@ import registerServiceWorker from './registerServiceWorker';
 let store = createStore(storeReducer) // this is store
 
 store.subscribe(function(){
-  //console.log('current state is: ',store.getState())
+  console.log('current state is: ',store.getState())
 })
 
 ReactDOM.render(

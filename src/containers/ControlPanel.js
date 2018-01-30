@@ -26,7 +26,7 @@ class ControlPanel extends React.Component {
         <button onClick={(e) => this.handleUpdate(e)}>
           updateMRs
         </button>
-        <button onClick={(e) => this.handleMoveOneStep(e)}>
+        <button onClick={() => this.handleMoveOneStep()}>
           move one step
         </button>
         <button
@@ -57,15 +57,21 @@ class ControlPanel extends React.Component {
   }
 
   handleUpdate(e) {
+
     this.props.updateMRs({spots:this.props.spots, size:this.props.size} );
   }
-  handleMoveOneStep(e) {
-    this.props.moveOneStep({size:this.props.size});
-  }
-  handleOnPressIn(e) {
-    this.interval = setInterval(() => this.props.moveOneStep({size:this.props.size}) , 100);
+
+  handleMoveOneStep() {
+    console.log("??????")
+      console.log(this.props.moveOneStep({size:this.props.size}))
+          console.log("0..........")
+
+
   }
 
+  handleOnPressIn(e) {
+    this.interval = setInterval(() =>{ this.handleMoveOneStep() }, 100);
+  }
   handleOnPressOut(e) {
     clearInterval(this.interval);
   }

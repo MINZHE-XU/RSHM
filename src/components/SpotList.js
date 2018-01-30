@@ -19,6 +19,8 @@ export default class SpotList extends React.Component {
             this.props.deletePath(spot)
             if(this.props.mode.algorithm==='local'){
                 this.props.deleteSpotForMRs({spots:spot, size:this.props.size})
+            }else{
+              this.props.updateMRs({spots:this.props.spots, size:this.props.size});
             }
 
             this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})

@@ -23,6 +23,10 @@ export function deleteAllSpot(payload) {
   return { type:'DELETE_ALL_SPOT' }
 }
 
+export function undateCandidateSpot(payload) {
+  return { type:'UPDATE_CANDIDATE_SPOT',spots:payload  }
+}
+
 export function centerListSpot(payload) {
   return { type:'CENTER_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng}
 }
@@ -44,7 +48,7 @@ export function changeAlgorithmMode() {
 
 export function updateMRs(payload) {
 
-  return { type:'FULLY_UPDATE_MRS' ,spots: payload.spots,size:payload.size }
+  return { type:'FULLY_UPDATE_MRS' ,size:payload.size }
 }
 
 export function addSpotForMRs(payload) {
@@ -62,6 +66,7 @@ export function addOnePath(payload) {
   let currentID=nextTodoId++
   return { type:'ADD_ONE_PATH' , id:currentID, path:payload.path  }
 }
+
 export function moveOneStep(payload) {
   return { type:'MOVE_ONE_STEP', size:payload.size}
 }
