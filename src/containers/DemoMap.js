@@ -23,6 +23,8 @@ const {
 } = require("react-google-maps");
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 
+
+
 const DemoMap = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places",
@@ -32,6 +34,7 @@ const DemoMap = compose(
   }),
   lifecycle({
     componentWillMount() {
+
       const refs = {}
 
       this.setState({
@@ -42,6 +45,17 @@ const DemoMap = compose(
         markers: [],
         onMapMounted: ref => {
           refs.map = ref;
+          const customMapType = new google.maps.StyledMapType([
+              {
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+              }
+            ], {
+              name: 'Custom Style'
+          });
+          const customMapTypeId = 'custom_style';
+          //refs.map.mapTypes.set(customMapTypeId, customMapType);
+          //refs.map.setMapTypeId(customMapTypeId);
         },
         onBoundsChanged: () => {
           this.setState({
@@ -89,10 +103,21 @@ const DemoMap = compose(
 )(props =>
   <GoogleMap
     ref={props.onMapMounted}
-    defaultZoom={15}
+    defaultZoom={13}
     clickableIcons={false}
-    options={{mapTypeControl:false
-      }}
+    defaultExtraMapTypes={[
+      ['custom_style', new google.maps.StyledMapType([
+            {
+              elementType: 'labels',
+              stylers: [{visibility: 'off'}]
+            }
+          ], {
+            name: 'Custom Style'
+        })]
+    ]}
+    defaultMapTypeId={'custom_style'}
+    options={{mapTypeControl:false}}
+
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
     onClick={props.onClick}

@@ -1,4 +1,4 @@
-const size = (state={length:0.004, height:0.002}, action) => {
+const size = (state={length:0.04, height:0.02}, action) => {
   switch (action.type) {
     case 'CHANGE_SIZE':
     console.log(action)
