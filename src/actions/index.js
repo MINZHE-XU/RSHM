@@ -27,6 +27,10 @@ export function undateCandidateSpot(payload) {
   return { type:'UPDATE_CANDIDATE_SPOT',spots:payload  }
 }
 
+export function deleteCandidateSpot(payload) {
+  return { type:'DELETE_CANDIDATE_SPOT',lat:payload.lat, lng:payload.lng  }
+}
+
 export function centerListSpot(payload) {
   return { type:'CENTER_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng}
 }

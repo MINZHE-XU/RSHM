@@ -9,7 +9,7 @@ class SizeControl extends React.Component {
   constructor() {
     super();
     this.state = {
-      message:''
+      messageSize:''
     }
   }
   render() {
@@ -23,9 +23,8 @@ class SizeControl extends React.Component {
         <button onClick={(e) => this.handleClick(e)}>
           ChangeSize
         </button>
-        {this.state.message}
+        {this.state.messageSize}
         <br />
-
       </div>
     )
   }
@@ -39,12 +38,9 @@ class SizeControl extends React.Component {
       this.props.deleteAllSpot()
       this.props.deleteAllPath()
       this.props.resetMRs()
-
-      this.setState({ message:"changed"})
-
-
+      this.setState({ messageSize:"changed"})
     }else{
-      this.setState({ message:"invalid value"})
+      this.setState({ messageSize:"invalid value"})
     }
     //this.props.addSpot({lat,lng});
   }

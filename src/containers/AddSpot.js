@@ -3,7 +3,7 @@ import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot } from '../actions'
 
 class AddSpot extends React.Component {
   constructor() {
@@ -25,6 +25,9 @@ class AddSpot extends React.Component {
         <button onClick={(e) => this.handleClick(e)}>
           Add
         </button>
+        <button onClick={(e) => this.handleAddAll(e)}>
+          AddALL
+        </button>
         {this.state.message}
         <button onClick={(e) => this.handleDelete(e)}>
           DeleteSelectedSpot
@@ -32,19 +35,26 @@ class AddSpot extends React.Component {
         <button onClick={(e) => this.handleDeleteAll(e)}>
           DeleteAll
         </button>
-<br />
+        <br />
 
       </div>
     )
   }
 
   handleClick(e) {
-
     const latValue= (this.refs.latInput.value.trim()==="") ? parseFloat(this.refs.latInput.placeholder):parseFloat(this.refs.latInput.value.trim())
     const lngValue= (this.refs.lngInput.value.trim()==="") ? parseFloat(this.refs.lngInput.placeholder):parseFloat(this.refs.lngInput.value.trim())
+    this.handleAdd(latValue,lngValue)
+    this.props.deleteCandidateSpot({lat:latValue,lng:lngValue})
+  }
+  handleAddAll(e){
+    this.props.statusPoint.candidateSpots.map((spot,index) =>{ this.handleAdd(spot.lat,spot.lng) })
+      this.props.undateCandidateSpot([])
+  }
+
+  handleAdd(latValue,lngValue){
     if(-90<=latValue &&latValue<=90 && -180<=lngValue && lngValue<=180){
       let temp=this.props.spots;
-
       const r=this.props.addSpot({id:-1,lat:latValue,lng:lngValue,isDynamic:false})
       if(this.props.mode.algorithm==='local'){
         this.props.addSpotForMRs ({spots:{lat:latValue, lng:lngValue}, size:this.props.size})
@@ -53,15 +63,12 @@ class AddSpot extends React.Component {
       }
       this.props.clickListSpot (r)
       this.props.centerListSpot (r)
-
       this.setState({ message:"added"})
     }else{
       this.setState({ message:"invalid value"})
     }
-
-    //this.props.addSpot({lat,lng});
-
   }
+
   handleChange(e) {
     this.props.changeMode();
   }
@@ -103,7 +110,9 @@ const mapDispatchToProps = {
   clickListSpot: clickListSpot,
   centerListSpot: centerListSpot,
   deletePath:deletePath,
-  deleteAllPath:deleteAllPath
+  deleteAllPath:deleteAllPath,
+  undateCandidateSpot:undateCandidateSpot,
+  deleteCandidateSpot:deleteCandidateSpot
 
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);

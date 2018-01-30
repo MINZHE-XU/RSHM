@@ -65,6 +65,22 @@ const statusPoint = (state=origin , action) => {
         }
       }
         break;
+
+        case 'DELETE_CANDIDATE_SPOT':
+        console.log(action)
+          const currentSpotToDelete = state.candidateSpots
+          const indexToDelete = currentSpotToDelete.findIndex(
+            function(spot){
+              return spot.lat === action.lat && spot.lng === action.lng;
+            }
+          )
+          if(indexToDelete<0){
+            return state
+          }else{
+            return {...state ,candidateSpots:[...currentSpotToDelete.slice(0, indexToDelete), ...currentSpotToDelete.slice(indexToDelete + 1)]}
+          }
+          break;
+
       default:
       return state
   }
