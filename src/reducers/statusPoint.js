@@ -25,7 +25,8 @@ const statusPoint = (state=origin , action) => {
       }
       break;
     case 'CLICKED_SPOT':
-    //console.log(action)
+    console.log(action)
+    console.log(state.clicked)
       if (state.clicked.id===action.id && state.clicked.lat===action.lat && state.clicked.lng===action.lng){
         return {...state,
           clicked:origin.clicked

@@ -4,7 +4,7 @@ import React from 'react'
 import {  GoogleMap } from "react-google-maps"
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
-import { addOnePath ,addSpot,addSpotForMRs,updateMRs,clickListSpot ,centerListSpot } from '../actions'
+import { addOnePath ,addSpot,addSpotForMRs,updateMRs,clickListSpot ,centerListSpot} from '../actions'
 const { DrawingManager } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
 class DrawingManagers extends React.Component {
@@ -43,20 +43,23 @@ class DrawingManagers extends React.Component {
            onMarkerComplete={this.handleMarkerComplete}
            onPolylineComplete={this.handlePolylineComplete}
          />
-
       )
   }
 
   handlePolylineComplete= (e) => {
     console.log(e.getPath().b)
-    this.props.addOnePath( {path:e.getPath().b})
+    console.log(this.props.mode.dynamic==="drone")
+    this.props.addOnePath( {path:e.getPath().b ,isDrone:(this.props.mode.dynamic==="drone")})
+
   }
+
   handleMarkerComplete= (e) => {
     console.log(e.position)
 
       if (this.props.mode.show==="point"){
         const payload= {id:-1,lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
         const r=this.props.addSpot (payload)
+
         //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
         if(this.props.mode.algorithm==='local'){
           this.props.addSpotForMRs ({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})

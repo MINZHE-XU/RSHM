@@ -16,52 +16,6 @@ class PolylineContainer extends React.Component {
 
   }
 
-  componentWillReceiveProps(nextProps) {
-    //console.log("this.props.path")
-    //console.log(this.props.path)
-    if  (this.props.path!==nextProps.path){
-      //console.log("stored path")
-      //console.log(nextProps.path)
-      const currentSpotToSearch =  this.props.spots
-      nextProps.path.map(function(apath, index){
-        let indexToDelete = currentSpotToSearch.findIndex(
-          function(spot){
-            return spot.id === apath.id;
-          }
-        )
-        if(indexToDelete>=0){
-          //find thing to update
-          //console.log("currentSpotToSearch[indexToDelete]")
-          //console.log(currentSpotToSearch[indexToDelete])
-          //console.log("nextProps.path[index]")
-          //console.log(nextProps.path[index])
-
-          //if in the last point, we donnot need to update.
-          if (currentSpotToSearch[indexToDelete].lat!==nextProps.path[index].path[0].lat() && currentSpotToSearch[indexToDelete].lng!==nextProps.path[index].path[0].lng()){
-            nextProps.deleteSpot(currentSpotToSearch[indexToDelete])
-            if(nextProps.mode.algorithm==='local'){
-              nextProps.deleteSpotForMRs({spots:currentSpotToSearch[indexToDelete], size:nextProps.size})
-            }
-            nextProps.addSpot({id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true})
-            if(nextProps.mode.algorithm==='local'){
-              nextProps.addSpotForMRs ({spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:nextProps.size})
-            }
-          }else{
-            console.log("the same!!!!!!!!!!!!!!")
-          }
-
-        }else{
-          nextProps.addSpot({id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true})
-          if(nextProps.mode.algorithm==='local'){
-            nextProps.addSpotForMRs ({spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:nextProps.size})
-          }
-        }
-          //console.log(apath)
-        })
-
-    }
-  }
-
   render() {
     return (
       this.props.path.map((apath) =>

@@ -56,6 +56,8 @@ class AddSpot extends React.Component {
     if(-90<=latValue &&latValue<=90 && -180<=lngValue && lngValue<=180){
       let temp=this.props.spots;
       const r=this.props.addSpot({id:-1,lat:latValue,lng:lngValue,isDynamic:false})
+      console.log(r)
+      console.log("aa:"+this.props.spots)
       if(this.props.mode.algorithm==='local'){
         this.props.addSpotForMRs ({spots:{lat:latValue, lng:lngValue}, size:this.props.size})
       }else{
@@ -113,6 +115,5 @@ const mapDispatchToProps = {
   deleteAllPath:deleteAllPath,
   undateCandidateSpot:undateCandidateSpot,
   deleteCandidateSpot:deleteCandidateSpot
-
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);

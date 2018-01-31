@@ -3,7 +3,7 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep,changeSize } from '../actions'
+import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep,changeSize,changeDynamicType  } from '../actions'
 
 
 class ControlPanel extends React.Component {
@@ -26,6 +26,10 @@ class ControlPanel extends React.Component {
       </button>
       {this.state.messageSize}
       <br />
+        <button onClick={(e) => this.handleChangeDynamicType(e)}>
+          change dynamic type
+        </button>
+        now:{this.props.mode.dynamic}
         <button onClick={(e) => this.handleChangeShowMode(e)}>
           change show mode
         </button>
@@ -61,6 +65,10 @@ class ControlPanel extends React.Component {
     this.props.changeAlgorithmMode()
   }
 
+  handleChangeDynamicType(){
+    this.props.changeDynamicType()
+  }
+
   recomputeMRs(mode,size){
     this.props.resetMRs()
     console.log(mode)
@@ -84,6 +92,7 @@ class ControlPanel extends React.Component {
       console.log(this.props.moveOneStep({size:this.props.size}))
   }
 
+
   handleOnPressIn(e) {
     this.interval = setInterval(() =>{ this.handleMoveOneStep() }, 100);
   }
@@ -97,8 +106,6 @@ class ControlPanel extends React.Component {
     if(0<lengthValue && lengthValue<=360 && 0<heightValue && heightValue<=180 ){
       const r=this.props.changeSize({length:lengthValue,height:heightValue})
       this.recomputeMRs(this.props.mode.algorithm,{length:lengthValue,height:heightValue})
-
-
       this.setState({ messageSize:"changed"})
     }else{
       this.setState({ messageSize:"invalid value"})
@@ -126,6 +133,7 @@ const mapDispatchToProps = {
   resetMRs:resetMRs,
   updateMRs: updateMRs,
   moveOneStep:moveOneStep,
-  changeSize: changeSize
+  changeSize: changeSize,
+    changeDynamicType:changeDynamicType
 }
 export default connect( mapStateToProps,mapDispatchToProps)(ControlPanel);

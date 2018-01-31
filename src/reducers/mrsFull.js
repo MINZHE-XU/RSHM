@@ -5,6 +5,8 @@ const mrs = (state =origin1, action , spots) => {
   switch (action.type) {
     case 'FULLY_UPDATE_MRS':
     console.log(action)
+    console.log(spots)
+
       const rectangles=pointToRectangle(spots, action.size)
       //console.log(rectangles)
       const sweepedData=sweepRectangle(rectangles)

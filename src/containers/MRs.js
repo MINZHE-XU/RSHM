@@ -30,7 +30,7 @@ class MRs extends React.Component {
                   east: mr.east,
                   west: mr.west
                 }}
-                options={{strokeWeight: (this.state.coloredID===mr.id) ? 1 : 0.1 ,
+                options={{strokeWeight: (this.state.coloredID===mr.id) ? 1 : 0.3 ,
                   fillOpacity:  mr.rs /maxMR,
                   draggable: false,
                   editable: false,

@@ -11,6 +11,7 @@ const path = (state=[] , action) => {
         ...state,
         {
           id: action.id,
+          isDrone:action.isDrone,
           path: action.path
         }
       ]
@@ -21,7 +22,6 @@ const path = (state=[] , action) => {
     let stepLength=0.1* Math.sqrt(action.size.length*action.size.length + action.size.height*action.size.height)
     let needUpdate=state
     let temp= needUpdate.map(function(apath, index){
-
       return moveForward(apath,stepLength)
      })
 
@@ -69,17 +69,20 @@ export function moveForward(apath,stepLength){
       //console.log(aaa)
       return {
           id: apath.id,
+          isDrone:apath.isDrone,
           path: [firstPosition, ...apath.path.slice(1)]
       }
 
     }else if(distance===stepLength){
       return {
           id: apath.id,
+          isDrone:apath.isDrone,
           path: [ ...apath.path.slice(1)]
       }
     }else{
       return moveForward({
           id: apath.id,
+          isDrone:apath.isDrone,
           path: [...apath.path.slice(1)]
       },stepLength-distance)
     }

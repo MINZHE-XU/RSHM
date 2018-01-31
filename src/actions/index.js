@@ -3,6 +3,7 @@ let nextTodoId = 0
 
 export function addSpot(payload) {
   let currentID=-1
+  //console.log(store.getState())
 
   if(payload.id>-1){
     currentID=payload.id
@@ -49,6 +50,10 @@ export function changeShowMode() {
 export function changeAlgorithmMode() {
   return { type:'CHANGE_ALGORITHM_MODE' }
 }
+export function changeDynamicType() {
+  return { type:'CHANGE_DYNAMIC_TYPE' }
+}
+
 
 export function updateMRs(payload) {
 
@@ -68,7 +73,7 @@ export function resetMRs(payload) {
 
 export function addOnePath(payload) {
   let currentID=nextTodoId++
-  return { type:'ADD_ONE_PATH' , id:currentID, path:payload.path  }
+  return { type:'ADD_ONE_PATH' , id:currentID, path:payload.path ,isDrone:payload.isDrone }
 }
 
 export function moveOneStep(payload) {
