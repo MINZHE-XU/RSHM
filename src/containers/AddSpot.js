@@ -63,7 +63,7 @@ class AddSpot extends React.Component {
       }else{
         this.props.updateMRs({ size:this.props.size});
       }
-      this.props.clickListSpot ({...r, kind:"point"})
+      //this.props.clickListSpot ({...r, kind:"point"})
       this.props.centerListSpot ({...r, kind:"point"})
       this.setState({ message:"added"})
     }else{
@@ -85,7 +85,7 @@ class AddSpot extends React.Component {
       }else{
         this.props.updateMRs({ size:this.props.size});
       }
-      this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 , kind:"unknown"})
+      //this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 , kind:"unknown"})
       this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
     }
     if(this.props.statusPoint.clicked.kind==="drone"){

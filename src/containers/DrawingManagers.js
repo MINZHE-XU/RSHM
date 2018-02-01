@@ -32,7 +32,7 @@ class DrawingManagers extends React.Component {
                //this.props.mode.show==="point"
                visible: false ,
                strokeWeight: 2,
-               strokeColor:'yellow',
+               strokeColor:'red',
                zIndex:-2
              },
              markerOptions: {
@@ -65,7 +65,7 @@ class DrawingManagers extends React.Component {
         }else{
           this.props.updateMRs({size:this.props.size});
         }
-        this.props.clickListSpot ({...r,kind:this.props.mode.dynamic})
+        //this.props.clickListSpot ({...r,kind:this.props.mode.dynamic})
         this.props.centerListSpot ({...r,kind:this.props.mode.dynamic})
       }
 

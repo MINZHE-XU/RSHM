@@ -25,7 +25,6 @@ const {
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 
 
-
 const DemoMap = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places",
@@ -78,6 +77,8 @@ const DemoMap = compose(
               bounds.extend(place.geometry.location)
             }
           });
+          console.log(places)
+
           const nextMarkers = places.map(place => ({
             position: place.geometry.location,
           }));
@@ -87,6 +88,7 @@ const DemoMap = compose(
             center: nextCenter,
             markers: nextMarkers,
           });
+
 
           this.props.undateCandidateSpot(this.state.markers.map((spot,index) =>{return {id:-1, number:index, lat:spot.position.lat(), lng: spot.position.lng()}}))// refs.map.fitBounds(bounds);
         },
@@ -107,14 +109,10 @@ const DemoMap = compose(
     defaultZoom={13}
     clickableIcons={false}
     defaultExtraMapTypes={[
-      ['custom_style', new google.maps.StyledMapType([
-            {
-              elementType: 'labels',
-              stylers: [{visibility: 'off'}]
-            }
-          ], {
+      ['custom_style', new google.maps.StyledMapType(mapStyle, {
             name: 'Custom Style'
-        })]
+        }
+      )]
     ]}
     defaultMapTypeId={'custom_style'}
     options={{mapTypeControl:false}}
@@ -177,3 +175,274 @@ const boxStyle={
   outline: `none`,
   textOverflow: `ellipses`,
 }
+
+const mapStyle=[
+      {
+        elementType: 'labels',
+        stylers: [{visibility: 'off'}]
+      }, {
+  "featureType": "administrative.country",
+  "elementType": "geometry.stroke",
+  "stylers": [
+      {
+          "color": "#76868e"
+      },
+      {
+          "weight": 1
+      }
+  ]
+},
+{
+  "featureType": "administrative.country",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "administrative.province",
+  "elementType": "geometry.stroke",
+  "stylers": [
+      {
+          "color": "#a9b8bf"
+      },
+      {
+          "weight": 1
+      }
+  ]
+},
+{
+  "featureType": "administrative.province",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "administrative.locality",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "administrative.neighborhood",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "administrative.land_parcel",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "landscape.man_made",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "landscape.natural.terrain",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#cfe6d4"
+      }
+  ]
+},
+{
+  "featureType": "water",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#a7bfc9"
+      }
+  ]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry.stroke",
+  "stylers": [
+      {
+          "color": "#76868e"
+      },
+      {
+          "lightness": 75
+      }
+  ]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#ffffff"
+      }
+  ]
+},
+{
+  "featureType": "road.highway",
+  "elementType": "labels",
+  "stylers": [
+      {
+          "visibility": "off"
+      }
+  ]
+},
+{
+  "featureType": "road.local",
+  "elementType": "geometry.stroke",
+  "stylers": [
+      {
+          "color": "#76868e"
+      },
+      {
+          "lightness": 60
+      }
+  ]
+},
+{
+  "featureType": "road.arterial",
+  "elementType": "geometry.stroke",
+  "stylers": [
+      {
+          "color": "#76868e"
+      },
+      {
+          "lightness": 55
+      }
+  ]
+},
+{
+  "featureType": "landscape.natural",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "color": "#f5f5f5"
+      }
+  ]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "lightness": 30
+      }
+  ]
+},
+{
+  "featureType": "administrative.province",
+  "elementType": "labels.text.fill",
+  "stylers": [
+      {
+          "color": "#7c93a3"
+      },
+      {
+          "gamma": 1
+      }
+  ]
+},
+{
+  "featureType": "administrative.locality",
+  "elementType": "labels.text.fill",
+  "stylers": [
+      {
+          "color": "#6e7e8a"
+      },
+      {
+          "lightness": 25
+      }
+  ]
+},
+{
+  "featureType": "administrative.neighborhood",
+  "elementType": "labels.text.fill",
+  "stylers": [
+      {
+          "color": "#93a1ac"
+      },
+      {
+          "lightness": 30
+      }
+  ]
+},
+{
+  "featureType": "road.local",
+  "elementType": "labels.text.fill",
+  "stylers": [
+      {
+          "color": "#93a1ac"
+      },
+      {
+          "lightness": -10
+      }
+  ]
+},
+{
+  "featureType": "road.arterial",
+  "elementType": "labels.text.fill",
+  "stylers": [
+      {
+          "color": "#93a1ac"
+      },
+      {
+          "lightness": -30
+      }
+  ]
+},
+{
+  "featureType": "poi.attraction",
+  "elementType": "labels.text",
+  "stylers": [
+      {
+          "visibility": "off"
+      }
+  ]
+},
+{
+  "featureType": "poi.attraction",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "lightness": 35
+      }
+  ]
+},
+{
+  "featureType": "poi.park",
+  "elementType": "geometry.fill",
+  "stylers": [
+      {
+          "lightness": 30
+      }
+  ]
+},
+{
+  "featureType": "administrative.country",
+  "elementType": "labels.text",
+  "stylers": [
+      {
+          "visibility": "off"
+      }
+  ]
+}
+
+    ]

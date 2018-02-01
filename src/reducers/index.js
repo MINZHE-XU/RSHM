@@ -74,7 +74,7 @@ function crossSliceReducer(state, action) {
                   }else{
                     crossStorage.spots=spots(crossStorage.spots, { type:'ADD_SPOT' , id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true})
                     crossStorage.statusPoint=statusPoint(crossStorage.statusPoint, { type:'CENTER_SPOT' , id:apath.id, lat:apath.path[0].lat() ,lng:apath.path[0].lng()})
-                    crossStorage.statusPoint=statusPoint(crossStorage.statusPoint, { type:'CLICKED_SPOT' , id:apath.id, lat:apath.path[0].lat() ,lng:apath.path[0].lng()})
+                    //crossStorage.statusPoint=statusPoint(crossStorage.statusPoint, { type:'CLICKED_SPOT' , id:apath.id, lat:apath.path[0].lat() ,lng:apath.path[0].lng()})
                     if(state.mode.algorithm==='local'){
                       crossStorage.mrs=mrs(crossStorage.mrs,{type:'ADD_ONE_SPOT_MRS',spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:state.size })
                     }

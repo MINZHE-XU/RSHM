@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
 import PropTypes from 'prop-types'
 
-const white_point_marker= 'http://maps.google.com/mapfiles/kml/paddle/wht-blank.png'
+const white_point_marker= 'http://maps.google.com/mapfiles/kml/paddle/ylw-blank.png'
 
 
 class Markers extends React.Component {
@@ -30,7 +30,10 @@ class Markers extends React.Component {
           (spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
           {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}:
           (spot.surveillanced===true)?
-          {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png',scaledSize:new google.maps.Size(12, 12),anchor: new google.maps.Point(6, 6)}:
+            (spot.isDynamic===true)?
+            {url: 'http://maps.google.com/mapfiles/kml/paddle/blu-diamond-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)} :
+            {url: 'http://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}
+          :
           (spot.isDynamic===true)?
           {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}:
           {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}}

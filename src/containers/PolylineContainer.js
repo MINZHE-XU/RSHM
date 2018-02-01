@@ -24,8 +24,8 @@ class PolylineContainer extends React.Component {
         visible={true}
         options= {{
           visible: this.props.mode.show==="point" ,
-          strokeWeight: 0.5,
-          strokeColor:'green',
+          strokeWeight: 1,
+          strokeColor:'pink',
           zIndex:-1
         }}
 
