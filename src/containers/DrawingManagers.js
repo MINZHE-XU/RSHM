@@ -48,7 +48,6 @@ class DrawingManagers extends React.Component {
 
   handlePolylineComplete= (e) => {
     console.log(e.getPath().b)
-    console.log(this.props.mode.dynamic==="drone")
     this.props.addOnePath( {path:e.getPath().b ,isDrone:(this.props.mode.dynamic==="drone")})
 
   }
@@ -57,7 +56,7 @@ class DrawingManagers extends React.Component {
     console.log(e.position)
 
       if (this.props.mode.show==="point"){
-        const payload= {id:-1,lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
+        const payload= {lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
         const r=this.props.addSpot (payload)
 
         //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
@@ -66,8 +65,8 @@ class DrawingManagers extends React.Component {
         }else{
           this.props.updateMRs({size:this.props.size});
         }
-        this.props.clickListSpot (r)
-        this.props.centerListSpot (r)
+        this.props.clickListSpot ({...r,kind:this.props.mode.dynamic})
+        this.props.centerListSpot ({...r,kind:this.props.mode.dynamic})
       }
 
   }
@@ -80,8 +79,6 @@ const mapDispatchToProps = {
   updateMRs:updateMRs,
   clickListSpot :clickListSpot ,
   centerListSpot:centerListSpot
-
-
 
 }
 

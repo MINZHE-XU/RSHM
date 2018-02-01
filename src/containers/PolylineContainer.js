@@ -36,14 +36,6 @@ class PolylineContainer extends React.Component {
 
 
 
-
-  handleOnMouseOver= (spot, e) => {
-    this.props.centerListSpot (spot)
-  }
-
-  handleOnClick= (spot,e) => {
-    this.props.clickListSpot (spot)
-  }
 }
 
 

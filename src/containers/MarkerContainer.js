@@ -29,6 +29,8 @@ class Markers extends React.Component {
           {url: white_point_marker,scaledSize:new google.maps.Size(38, 38)}:
           (spot.lat===this.props.statusPoint.center.lat && spot.lng===this.props.statusPoint.center.lng)?
           {url: white_point_marker,scaledSize:new google.maps.Size(18, 18)}:
+          (spot.surveillanced===true)?
+          {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png',scaledSize:new google.maps.Size(12, 12),anchor: new google.maps.Point(6, 6)}:
           (spot.isDynamic===true)?
           {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}:
           {url: 'http://maps.google.com/mapfiles/kml/paddle/wht-blank-lv.png',scaledSize:new google.maps.Size(8, 8),anchor: new google.maps.Point(4, 4)}}
@@ -41,11 +43,11 @@ class Markers extends React.Component {
   }
 
   handleOnMouseOver= (spot, e) => {
-    this.props.centerListSpot (spot)
+    this.props.centerListSpot ({...spot, kind:"point"})
   }
 
   handleOnClick= (spot,e) => {
-    this.props.clickListSpot (spot)
+    this.props.clickListSpot ({...spot, kind:"point"})
   }
 }
 

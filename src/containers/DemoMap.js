@@ -12,6 +12,7 @@ import Shades from '../components/Shades'
 import MRs from './MRs'
 import SearchBoxs from './SearchBoxs'
 import DrawingManagers from './DrawingManagers'
+import DroneContainer from './DroneContainer'
 
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");
@@ -91,7 +92,7 @@ const DemoMap = compose(
         },
 
         onMouseOut : (e) => {
-          const payload= {id:-1,lat: 1000,lng:1000}
+          const payload= {id:-1,lat: 1000,lng:1000, type:"unknown"}
           this.props.centerListSpot (payload)
         },
 
@@ -137,6 +138,7 @@ const DemoMap = compose(
     </SearchBox>
     <Markers />
     <CandidateMarkers />
+    <DroneContainer />
     <DrawingManagers  />
     <MRs />
     <PolylineContainer />

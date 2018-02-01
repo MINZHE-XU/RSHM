@@ -6,8 +6,8 @@ import size from './size'
 import mrs from './mrs'
 import mrsFull from './mrsFull'
 import path from './path'
-
-
+import drones from './drones'
+import { pointToRectangle } from './mrs'
 
 const combinedReducer = combineReducers({
   spots,
@@ -15,7 +15,8 @@ const combinedReducer = combineReducers({
   size,
   mode,
   mrs,
-  path
+  path,
+  drones
 })
 
 
@@ -27,19 +28,20 @@ function crossSliceReducer(state, action) {
        statusPoint: state.statusPoint,
        size: state.size,
        mode: state.mode,
-       path: state.path
+       path: state.path,
+       drones: state.drones
      }
 
-    switch(action.type) {
-        case "FULLY_UPDATE_MRS" :
-        return {...crossStorage, mrs:mrsFull(state.mrs, action,  state.spots )  }
-        break
+    if (action.type=== "FULLY_UPDATE_MRS"){
+        crossStorage.mrs=mrsFull(state.mrs, action,  state.spots )
+    }
 
-        case 'ADD_ONE_PATH'  :
-        case "MOVE_ONE_STEP"   :
+    //cases needs to update spots and drones
+    if (action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"){
+
         const currentSpotToSearch =  state.spots
+        crossStorage.drones=[]
         state.path.map(function(apath, index){
-          console.log(apath)
 
           if (apath.isDrone===false){
           let indexToDelete = currentSpotToSearch.findIndex(
@@ -77,17 +79,43 @@ function crossSliceReducer(state, action) {
                       crossStorage.mrs=mrs(crossStorage.mrs,{type:'ADD_ONE_SPOT_MRS',spots:{id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true}, size:state.size })
                     }
                   }
+
+                }else{
+                  //updating drones
+                  crossStorage.drones= drones(crossStorage.drones, { type:'ADD_DRONE' , id:apath.id,lat:apath.path[0].lat() ,lng:apath.path[0].lng(),isDynamic:true})
                 }
+
                     //console.log(apath)
                   })
 
-           console.log(crossStorage.mrs)
-        return crossStorage
-        break
+           //console.log(crossStorage.mrs)
 
-        default :
-        return state;
-    }
+      }
+
+
+    // cases need to update surveillanced relationships
+    if (action.type=== 'ADD_SPOT'  ||action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"||"DELETE_DRONE"){
+
+        // to compute the new
+        crossStorage.spots=crossStorage.spots.map(function(spot){return {...spot, surveillanced:false}})
+        let tempSpots=crossStorage.spots
+        crossStorage.drones.map(function(drone, index){
+          crossStorage.spots=tempSpots
+          tempSpots=[]
+          tempSpots=crossStorage.spots.map(function(spot, index){
+            let isHeightIn= -crossStorage.size.height/2 <= (spot.lat-drone.lat) && (spot.lat-drone.lat)<=crossStorage.size.height/2
+            let minL=Math.min(Math.abs(spot.lng-drone.lng), Math.abs(spot.lng-drone.lng+360), Math.abs(spot.lng-drone.lng-360))
+            let isLengthIn= -crossStorage.size.length/2 <= minL && minL <= crossStorage.size.length/2
+
+            console.log(isHeightIn&&isLengthIn)
+            return {...spot, surveillanced:(spot.surveillanced||(isHeightIn&&isLengthIn))}
+          })
+        })
+        crossStorage.spots=tempSpots
+      }
+
+        return crossStorage;
+
 }
 
 

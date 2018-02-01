@@ -13,7 +13,7 @@ export default class SpotList extends React.Component {
           <SpotBullet spot={spot}
           statusPoint={this.props.statusPoint}
           key={spot.id}
-          onClick={() => this.props.clickListSpot(spot)}
+          onClick={() => this.props.clickListSpot({...spot, kind:"point" })}
           buttomOnClick={() => {
             const r=this.props.deleteSpot(spot)
             this.props.deletePath(spot)
@@ -23,11 +23,11 @@ export default class SpotList extends React.Component {
               this.props.updateMRs({spots:this.props.spots, size:this.props.size});
             }
 
-            this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
-            this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
+            this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 ,kind:"unknown"})
+            this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
           }}
-          onMouseOver={() => this.props.centerListSpot(spot)}
-          onMouseOut={() => this.props.centerListSpot({id:-1,lat: 100000,lng:10000})}  />
+          onMouseOver={() => this.props.centerListSpot({...spot, kind:"point" })}
+          onMouseOut={() => this.props.centerListSpot({id:-1,lat: 100000,lng:10000,kind:"unknown"})}  />
         )}
       </ul>
     )

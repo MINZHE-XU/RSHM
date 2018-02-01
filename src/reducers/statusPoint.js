@@ -2,12 +2,14 @@ const origin = {
   center:{
     id: -1,
     lat: 10000,
-    lng: 10000
+    lng: 10000,
+    kind:"unknown"
   },
   clicked:{
     id: -1,
     lat: 10000,
-    lng: 10000
+    lng: 10000,
+    kind:"unknown"
   },
   candidateSpots:[]
 }
@@ -20,13 +22,14 @@ const statusPoint = (state=origin , action) => {
         center:{
           id: action.id,
           lat: action.lat,
-          lng: action.lng
+          lng: action.lng,
+          kind: action.kind
         }
       }
       break;
     case 'CLICKED_SPOT':
-    console.log(action)
-    console.log(state.clicked)
+    //console.log(action)
+    //console.log(state.clicked)
       if (state.clicked.id===action.id && state.clicked.lat===action.lat && state.clicked.lng===action.lng){
         return {...state,
           clicked:origin.clicked
@@ -36,7 +39,8 @@ const statusPoint = (state=origin , action) => {
           clicked:{
             id: action.id,
             lat: action.lat,
-            lng: action.lng
+            lng: action.lng,
+            kind: action.kind
           }
         }
       }
@@ -48,12 +52,14 @@ const statusPoint = (state=origin , action) => {
           center:{
             id: -1,
             lat: action.spots[0].lat,
-            lng: action.spots[0].lng
+            lng: action.spots[0].lng,
+            kind:"unknown"
           },
           clicked:{
             id: -1,
             lat: action.spots[0].lat,
-            lng: action.spots[0].lng
+            lng: action.spots[0].lng,
+            kind:"unknown"
           },
           candidateSpots:action.spots
         }

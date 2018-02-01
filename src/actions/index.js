@@ -20,6 +20,10 @@ export function deleteSpot(payload) {
   //clickListSpot ({id:-1 , lat:10000, lng:10000})
   return { type:'DELETE_SPOT' , id: payload.id}
 }
+export function deleteDrone(payload) {
+  return { type:'DELETE_DRONE' , id: payload.id}
+}
+
 export function deleteAllSpot(payload) {
   return { type:'DELETE_ALL_SPOT' }
 }
@@ -33,11 +37,12 @@ export function deleteCandidateSpot(payload) {
 }
 
 export function centerListSpot(payload) {
-  return { type:'CENTER_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng}
+
+  return { type:'CENTER_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng , kind:payload.kind}
 }
 
 export function clickListSpot(payload) {
-  return { type:'CLICKED_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng}
+  return { type:'CLICKED_SPOT' ,id: payload.id, lat:payload.lat, lng:payload.lng, kind:payload.kind }
 }
 
 export function changeSize(payload) {

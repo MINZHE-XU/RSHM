@@ -2,7 +2,7 @@ import React from 'react'
 import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs } from '../actions'
+import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
 import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot } from '../actions'
 
 class AddSpot extends React.Component {
@@ -63,8 +63,8 @@ class AddSpot extends React.Component {
       }else{
         this.props.updateMRs({ size:this.props.size});
       }
-      this.props.clickListSpot (r)
-      this.props.centerListSpot (r)
+      this.props.clickListSpot ({...r, kind:"point"})
+      this.props.centerListSpot ({...r, kind:"point"})
       this.setState({ message:"added"})
     }else{
       this.setState({ message:"invalid value"})
@@ -76,23 +76,31 @@ class AddSpot extends React.Component {
   }
 
   handleDelete(e) {
-    const r=this.props.deleteSpot(this.props.statusPoint.clicked)
-    this.props.deletePath(this.props.statusPoint.clicked)
+    if (this.props.statusPoint.clicked.kind==="point"){
+      const r=this.props.deleteSpot(this.props.statusPoint.clicked)
+      this.props.deletePath(this.props.statusPoint.clicked)
 
-    if(this.props.mode.algorithm==='local'){
-      this.props.deleteSpotForMRs({spots:this.props.statusPoint.clicked, size:this.props.size})
-    }else{
-      this.props.updateMRs({ size:this.props.size});
+      if(this.props.mode.algorithm==='local'){
+        this.props.deleteSpotForMRs({spots:this.props.statusPoint.clicked, size:this.props.size})
+      }else{
+        this.props.updateMRs({ size:this.props.size});
+      }
+      this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 , kind:"unknown"})
+      this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
     }
-    this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
-    this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
+    if(this.props.statusPoint.clicked.kind==="drone"){
+      this.props.deleteDrone(this.props.statusPoint.clicked)
+      this.props.deletePath(this.props.statusPoint.clicked)
+
+    }
+
   }
   handleDeleteAll(e) {
     const r=this.props.deleteAllSpot()
     this.props.deleteAllPath()
     this.props.resetMRs()
-    this.props.clickListSpot ({id:-1 , lat:10000, lng:10000})
-    this.props.centerListSpot ({id:-1 , lat:10000, lng:10000})
+    this.props.clickListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
+    this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
   }
 }
 const mapStateToProps = (state) => ({
@@ -114,6 +122,7 @@ const mapDispatchToProps = {
   deletePath:deletePath,
   deleteAllPath:deleteAllPath,
   undateCandidateSpot:undateCandidateSpot,
-  deleteCandidateSpot:deleteCandidateSpot
+  deleteCandidateSpot:deleteCandidateSpot,
+  deleteDrone:deleteDrone
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
