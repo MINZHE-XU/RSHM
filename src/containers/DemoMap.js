@@ -28,8 +28,8 @@ const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox
 const DemoMap = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `600%` }} />,
-    containerElement: <div style={{ height: `600px` }} />,
+    loadingElement: <div style={{ height: `800%` }} />,
+    containerElement: <div style={{ height: `800px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
@@ -117,7 +117,11 @@ const DemoMap = compose(
       )]
     ]}
     defaultMapTypeId={'custom_style'}
-    options={{mapTypeControl:false}}
+    options={{mapTypeControl:false,
+    streetViewControl:false,
+  zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_TOP} 
+}
+     }
 
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}

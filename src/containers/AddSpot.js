@@ -4,7 +4,7 @@ import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
 import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone } from '../actions'
-import { Button } from 'react-bootstrap';
+import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
 
 class AddSpot extends React.Component {
   constructor() {
@@ -18,33 +18,58 @@ class AddSpot extends React.Component {
   render() {
     return (
       <div>
-        <label>
-          Add point:
-        </label>
-        <input type='text' placeholder={(this.props.statusPoint.clicked.lat===10000)?"type latitude here":this.props.statusPoint.clicked.lat} ref='latInput' />
-        <input type='text' placeholder={(this.props.statusPoint.clicked.lng===10000)?"type longtitude here":this.props.statusPoint.clicked.lng} ref='lngInput' />
-        <button onClick={(e) => this.handleClick(e)}>
-          Add
-        </button>
-        <button onClick={(e) => this.handleAddAll(e)}>
-          AddALL
-        </button>
-        {this.state.message}
-        <button onClick={(e) => this.handleDelete(e)}>
-          DeleteSelectedSpot
-        </button>
-        <button onClick={(e) => this.handleDeleteAll(e)}>
-          DeleteAll
-        </button>
-        <br />
+
+      <Panel >
+      <br />
+        <Row >
+            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+              &nbsp;&nbsp;X-Coordinate
+            </Col>
+            <Col xs={7} sm={7} md={7}>
+              <FormControl bsSize="small" type='text' placeholder={(this.props.statusPoint.clicked.lat===10000)?"type latitude here":this.props.statusPoint.clicked.lat} inputRef={(input) => this.latInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleClick(e)}} }  />
+            </Col>
+        </Row >
+        <Row >
+            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+              &nbsp;&nbsp;Y-Coordinate
+            </Col>
+            <Col xs={7} sm={7} md={7}>
+            <FormControl bsSize="small" type='text' placeholder={(this.props.statusPoint.clicked.lng===10000)?"type longtitude here":this.props.statusPoint.clicked.lng} inputRef={(input) => this.lngInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleClick(e)}} }  />
+            </Col>
+        </Row >
+        <Col xs={4} sm={4} md={4}>
+        </Col>&nbsp;&nbsp;&nbsp;{this.state.message}<br />
+        <Row >
+        <Col xs={2} sm={2} md={2}>
+        </Col>
+            <Col xs={4} sm={4} md={4}>
+                <Button bsSize="small" type="submit"  onClick={(e) => this.handleClick(e)}>
+                  &nbsp;&nbsp;Add Selected&nbsp;&nbsp;
+                </Button>
+                <Button bsSize="small" type="submit"  onClick={(e) => this.handleAddAll(e)}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add All&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </Button>
+            </Col>
+            <Col xs={4} sm={4} md={4}>
+                <Button bsSize="small" type="submit"  onClick={(e) => this.handleDelete(e)}>
+                  Delete Selected
+                </Button>
+                <Button bsSize="small" type="submit"  onClick={(e) => this.handleDeleteAll(e)}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete All&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </Button>
+            </Col>
+        </Row >          ​
+      </Panel>
+
+
 
       </div>
     )
   }
 
   handleClick(e) {
-    const latValue= (this.refs.latInput.value.trim()==="") ? parseFloat(this.refs.latInput.placeholder):parseFloat(this.refs.latInput.value.trim())
-    const lngValue= (this.refs.lngInput.value.trim()==="") ? parseFloat(this.refs.lngInput.placeholder):parseFloat(this.refs.lngInput.value.trim())
+    const latValue= (this.latInput.value.trim()==="") ? parseFloat(this.latInput.placeholder):parseFloat(this.latInput.value.trim())
+    const lngValue= (this.lngInput.value.trim()==="") ? parseFloat(this.lngInput.placeholder):parseFloat(this.lngInput.value.trim())
     this.handleAdd(latValue,lngValue)
     this.props.deleteCandidateSpot({lat:latValue,lng:lngValue})
   }
@@ -129,3 +154,26 @@ const mapDispatchToProps = {
   deleteAllDrone:deleteAllDrone
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
+
+
+/**
+<label>
+  Add point:
+</label>
+<input type='text' placeholder={(this.props.statusPoint.clicked.lat===10000)?"type latitude here":this.props.statusPoint.clicked.lat} ref='latInput' />
+<input type='text' placeholder={(this.props.statusPoint.clicked.lng===10000)?"type longtitude here":this.props.statusPoint.clicked.lng} ref='lngInput' />
+<button onClick={(e) => this.handleClick(e)}>
+  Add
+</button>
+<button onClick={(e) => this.handleAddAll(e)}>
+  AddALL
+</button>
+
+<button onClick={(e) => this.handleDelete(e)}>
+  DeleteSelectedSpot
+</button>
+<button onClick={(e) => this.handleDeleteAll(e)}>
+  DeleteAll
+</button>
+<br />
+**/

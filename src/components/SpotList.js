@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import SpotBullet from './SpotBullet'
 //import Todo from './Todo'
-import {Panel,Badge } from 'react-bootstrap';
+import {Panel,Badge,ListGroup } from 'react-bootstrap';
 
 export default class SpotList extends React.Component {
   handleClick() {
@@ -13,14 +13,9 @@ export default class SpotList extends React.Component {
   render() {
     return (
       <Panel  defaultExpanded>
-        <Panel.Heading>
-          <Panel.Title toggle>
-            Data Points    <Badge pullRight={true}>{this.props.spots.length}</Badge>
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Collapse>
+
           <Panel.Body className="datapoint-panel">
-          <ul>
+          <ListGroup>
             {this.props.spots.map((spot) =>
               <SpotBullet spot={spot}
               statusPoint={this.props.statusPoint}
@@ -41,9 +36,9 @@ export default class SpotList extends React.Component {
               onMouseOver={() => this.props.centerListSpot({...spot, kind:"point" })}
               onMouseOut={() => this.props.centerListSpot({id:-1,lat: 100000,lng:10000,kind:"unknown"})}  />
             )}
-          </ul>
+          </ListGroup>
           </Panel.Body>
-        </Panel.Collapse>
+
       </Panel>
 
     )
@@ -58,6 +53,18 @@ export default class SpotList extends React.Component {
          onClick={() => this.props.onTodoClick(index)} />
        />
      )}
+
+     <Panel.Heading >
+       <Panel.Title toggle>
+         Data Points    <Badge pullRight={true}>{this.props.spots.length}</Badge>
+       </Panel.Title>
+     </Panel.Heading>
+     <Panel.Collapse>
+
+
+
+           </Panel.Collapse>
  */
+
 
 }

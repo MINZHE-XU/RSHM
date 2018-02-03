@@ -15,8 +15,9 @@ class App extends Component {
       <Grid>
       <Row className="show-grid">
         <Col xs={4} md={4}>
-          <ControlPanel />
           <AddSpot />
+          <ControlPanel />
+
           <ShowSpot />
         </Col>
         <Col xs={8} md={8}>
@@ -24,10 +25,6 @@ class App extends Component {
 
         </Col>
       </Row>
-
-
-
-
       </Grid>
     );
   }
