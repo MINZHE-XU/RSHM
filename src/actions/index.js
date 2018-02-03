@@ -27,9 +27,17 @@ export function deleteDrone(payload) {
 export function deleteAllSpot(payload) {
   return { type:'DELETE_ALL_SPOT' }
 }
+export function deleteAllDrone(payload) {
+  return { type:'DELETE_ALL_DRONE'}
+}
 
+
+
+export function changeInfoWindowOpen(payload) {
+  return { type:'CHANGE_INFO_WINDOW_OPEN' , number: payload }
+}
 export function undateCandidateSpot(payload) {
-  return { type:'UPDATE_CANDIDATE_SPOT',spots:payload  }
+  return { type:'UPDATE_CANDIDATE_SPOT',spots:payload   }
 }
 
 export function deleteCandidateSpot(payload) {
@@ -61,7 +69,6 @@ export function changeDynamicType() {
 
 
 export function updateMRs(payload) {
-
   return { type:'FULLY_UPDATE_MRS' ,size:payload.size }
 }
 
@@ -82,7 +89,7 @@ export function addOnePath(payload) {
 }
 
 export function moveOneStep(payload) {
-  return { type:'MOVE_ONE_STEP', size:payload.size}
+  return { type:'MOVE_ONE_STEP', size:payload.size,stepLengthNumber:payload.stepLengthNumber}
 }
 
 export function deletePath(payload) {

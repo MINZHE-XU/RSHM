@@ -87,6 +87,28 @@ const statusPoint = (state=origin , action) => {
             return {...state ,candidateSpots:[...currentSpotToDelete.slice(0, indexToDelete), ...currentSpotToDelete.slice(indexToDelete + 1)]}
           }
           break;
+    case 'CHANGE_INFO_WINDOW_OPEN':
+    console.log(action)
+    const changedSpots=state.candidateSpots.map(function(spot, index){
+      return {...spot, isOpen:false}
+     })
+    const currentSpotToUpdate = state.candidateSpots
+    const indexToUpdate = currentSpotToUpdate.findIndex(
+      function(spot){
+        return spot.number === action.number;
+      }
+    )
+
+    if(indexToUpdate<0){
+      return state
+    }else{
+      const newSpotToUpdate = {
+        ...currentSpotToUpdate[indexToUpdate],
+        isOpen:!currentSpotToUpdate[indexToUpdate].isOpen
+      }
+      return {...state ,candidateSpots:[...changedSpots.slice(0, indexToUpdate), newSpotToUpdate , ...changedSpots.slice(indexToUpdate + 1)]}
+    }
+    break;
 
       default:
       return state

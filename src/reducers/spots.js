@@ -15,7 +15,8 @@ const spots = (state =[], action) => {
           id: action.id,
           lat: action.lat,
           lng: action.lng,
-          isDynamic:action.isDynamic
+          isDynamic:action.isDynamic,
+          surveillanced:false
         }
       ]
       break;

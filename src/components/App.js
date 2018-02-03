@@ -6,17 +6,29 @@ import SizeControl from '../containers/SizeControl'
 import ControlPanel from '../containers/ControlPanel'
 //import MyFancyComponent from '../containers/MapNew1'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-
+import {Grid, Row, Col, Clearfix } from 'react-bootstrap';
 
 class App extends Component {
   render() {
     return (
-      <div>
-        <DemoMap />
-        <AddSpot />
-        <ControlPanel />
-        <ShowSpot />
-      </div>
+
+      <Grid>
+      <Row className="show-grid">
+        <Col xs={4} md={4}>
+          <ControlPanel />
+          <AddSpot />
+          <ShowSpot />
+        </Col>
+        <Col xs={8} md={8}>
+          <DemoMap />
+
+        </Col>
+      </Row>
+
+
+
+
+      </Grid>
     );
   }
 }

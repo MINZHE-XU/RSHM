@@ -28,8 +28,8 @@ const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox
 const DemoMap = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    loadingElement: <div style={{ height: `600%` }} />,
+    containerElement: <div style={{ height: `600px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
@@ -81,6 +81,7 @@ const DemoMap = compose(
 
           const nextMarkers = places.map(place => ({
             position: place.geometry.location,
+            information:place
           }));
           const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
 
@@ -89,9 +90,9 @@ const DemoMap = compose(
             markers: nextMarkers,
           });
 
-
-          this.props.undateCandidateSpot(this.state.markers.map((spot,index) =>{return {id:-1, number:index, lat:spot.position.lat(), lng: spot.position.lng()}}))// refs.map.fitBounds(bounds);
+          this.props.undateCandidateSpot(this.state.markers.map((spot,index) =>{return {id:-1, number:index, lat:spot.position.lat(), lng: spot.position.lng(),information:spot.information ,isOpen:(index===0)}}))// refs.map.fitBounds(bounds);
         },
+
 
         onMouseOut : (e) => {
           const payload= {id:-1,lat: 1000,lng:1000, type:"unknown"}
@@ -104,6 +105,7 @@ const DemoMap = compose(
   withScriptjs,
   withGoogleMap
 )(props =>
+
   <GoogleMap
     ref={props.onMapMounted}
     defaultZoom={13}
@@ -125,7 +127,7 @@ const DemoMap = compose(
     <SearchBox
       ref={props.onSearchBoxMounted}
       bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
+      controlPosition={google.maps.ControlPosition.TOP_CENTER}
       onPlacesChanged={props.onPlacesChanged}
     >
       <input

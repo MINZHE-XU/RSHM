@@ -3,7 +3,8 @@ import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone } from '../actions'
+import { Button } from 'react-bootstrap';
 
 class AddSpot extends React.Component {
   constructor() {
@@ -91,13 +92,14 @@ class AddSpot extends React.Component {
     if(this.props.statusPoint.clicked.kind==="drone"){
       this.props.deleteDrone(this.props.statusPoint.clicked)
       this.props.deletePath(this.props.statusPoint.clicked)
-
     }
 
   }
   handleDeleteAll(e) {
     const r=this.props.deleteAllSpot()
+    this.props.deleteAllDrone()
     this.props.deleteAllPath()
+    this.props.undateCandidateSpot([])
     this.props.resetMRs()
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
@@ -123,6 +125,7 @@ const mapDispatchToProps = {
   deleteAllPath:deleteAllPath,
   undateCandidateSpot:undateCandidateSpot,
   deleteCandidateSpot:deleteCandidateSpot,
-  deleteDrone:deleteDrone
+  deleteDrone:deleteDrone,
+  deleteAllDrone:deleteAllDrone
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);

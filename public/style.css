@@ -1,0 +1,16 @@
+body {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+
+.datapoint-panel {
+  /* height: 480px; */
+  height: calc(50vh - 200px);
+  overflow-y: auto;
+}
+
+.drone-image{
+  height: 18px;
+  length: 18px;
+}

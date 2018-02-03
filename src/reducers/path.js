@@ -19,7 +19,7 @@ const path = (state=[] , action) => {
       break
     case 'MOVE_ONE_STEP':
     console.log(action)
-    let stepLength=action.size.step * Math.sqrt(action.size.length*action.size.length + action.size.height*action.size.height)
+    let stepLength=action.size.step * Math.sqrt(action.size.length*action.size.length + action.size.height*action.size.height)*action.stepLengthNumber
     let needUpdate=state
     let temp= needUpdate.map(function(apath, index){
       return moveForward(apath,stepLength)

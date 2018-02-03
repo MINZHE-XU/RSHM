@@ -22,7 +22,7 @@ class DrawingManagers extends React.Component {
            defaultOptions={{
              drawingControl: true,
              drawingControlOptions: {
-               position: google.maps.ControlPosition.TOP_CENTER,
+               position: google.maps.ControlPosition.TOP_LEFT,
                drawingModes: [
                  google.maps.drawing.OverlayType.MARKER,
                  google.maps.drawing.OverlayType.POLYLINE
