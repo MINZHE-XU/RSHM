@@ -107,7 +107,7 @@ function crossSliceReducer(state, action) {
             let minL=Math.min(Math.abs(spot.lng-drone.lng), Math.abs(spot.lng-drone.lng+360), Math.abs(spot.lng-drone.lng-360))
             let isLengthIn= -crossStorage.size.length/2 <= minL && minL <= crossStorage.size.length/2
 
-            console.log(isHeightIn&&isLengthIn)
+            //console.log(isHeightIn&&isLengthIn)
             return {...spot, surveillanced:(spot.surveillanced||(isHeightIn&&isLengthIn))}
           })
         })

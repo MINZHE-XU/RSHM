@@ -32,7 +32,6 @@ export function deleteAllDrone(payload) {
 }
 
 
-
 export function changeInfoWindowOpen(payload) {
   return { type:'CHANGE_INFO_WINDOW_OPEN' , number: payload }
 }

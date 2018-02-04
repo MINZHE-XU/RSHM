@@ -10,14 +10,39 @@ class AddSpot extends React.Component {
   constructor() {
     super();
     this.state = {
-      message:''
+      message:'',
+      data: null
     }
+    this.handleFileSelect = this.handleFileSelect.bind(this);
+  }
+  displayData(content) {
+    //this.setState({data: content});
+    const obj = JSON.parse(content);
+    console.log(obj)
   }
 
+  handleFileSelect(evt) {
+    let files = evt.target.files;
+    if (!files.length) {
+      //alert('No file select');
+      return;
+    }
+    let file = files[0];
+    let that = this;
+    let reader = new FileReader();
+    reader.onload = function(e) {
+      that.displayData(e.target.result);
+    };
+    reader.readAsText(file);
+
+  }
 
   render() {
+    const data = this.state.data;
     return (
-      <div>
+
+
+
 
       <Panel >
       <br />
@@ -40,8 +65,7 @@ class AddSpot extends React.Component {
         <Col xs={4} sm={4} md={4}>
         </Col>&nbsp;&nbsp;&nbsp;{this.state.message}<br />
         <Row >
-        <Col xs={2} sm={2} md={2}>
-        </Col>
+
             <Col xs={4} sm={4} md={4}>
                 <Button bsSize="small" type="submit"  onClick={(e) => this.handleClick(e)}>
                   &nbsp;&nbsp;Add Selected&nbsp;&nbsp;
@@ -58,12 +82,21 @@ class AddSpot extends React.Component {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete All&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Button>
             </Col>
-        </Row >          ​
+            <Col xs={4} sm={4} md={4}>
+
+    <Button>
+            <label className="file-load-label">
+                <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
+              Choose a file
+              </label>
+Default</Button>
+
+            </Col>
+        </Row >
+              ​
       </Panel>
 
 
-
-      </div>
     )
   }
 
@@ -72,10 +105,12 @@ class AddSpot extends React.Component {
     const lngValue= (this.lngInput.value.trim()==="") ? parseFloat(this.lngInput.placeholder):parseFloat(this.lngInput.value.trim())
     this.handleAdd(latValue,lngValue)
     this.props.deleteCandidateSpot({lat:latValue,lng:lngValue})
+
   }
   handleAddAll(e){
     this.props.statusPoint.candidateSpots.map((spot,index) =>{ this.handleAdd(spot.lat,spot.lng) })
       this.props.undateCandidateSpot([])
+      this.setState({ message:"added"})
   }
 
   handleAdd(latValue,lngValue){
@@ -106,19 +141,19 @@ class AddSpot extends React.Component {
       const r=this.props.deleteSpot(this.props.statusPoint.clicked)
       this.props.deletePath(this.props.statusPoint.clicked)
 
-      if(this.props.mode.algorithm==='local'){
+      if(this.props.mode.algorithm==='local' ){
         this.props.deleteSpotForMRs({spots:this.props.statusPoint.clicked, size:this.props.size})
       }else{
         this.props.updateMRs({ size:this.props.size});
       }
-      //this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 , kind:"unknown"})
+      this.props.clickListSpot ({id:-1 , lat:10000, lng:10000 , kind:"unknown"})
       this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
     }
     if(this.props.statusPoint.clicked.kind==="drone"){
       this.props.deleteDrone(this.props.statusPoint.clicked)
       this.props.deletePath(this.props.statusPoint.clicked)
     }
-
+this.setState({ message:"deleted"})
   }
   handleDeleteAll(e) {
     const r=this.props.deleteAllSpot()
@@ -128,6 +163,7 @@ class AddSpot extends React.Component {
     this.props.resetMRs()
     this.props.clickListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
     this.props.centerListSpot ({id:-1 , lat:10000, lng:10000, kind:"unknown"})
+    this.setState({ message:"deleted"})
   }
 }
 const mapStateToProps = (state) => ({

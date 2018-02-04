@@ -7,7 +7,7 @@ export default class SpotBullet extends React.Component {
 
 
     <ListGroupItem
-        bsStyle={((this.props.spot.id===this.props.statusPoint.center.id)|| (this.props.spot.id===this.props.statusPoint.clicked.id) )? "warning":""}
+        bsStyle={((this.props.spot.id===this.props.statusPoint.center.id)|| (this.props.spot.id===this.props.statusPoint.clicked.id) )? "warning":undefined}
         onMouseOver={this.props.onMouseOver}
         onMouseOut={this.props.onMouseOut}
         onClick={this.props.onClick}

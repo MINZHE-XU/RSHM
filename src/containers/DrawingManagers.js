@@ -53,7 +53,7 @@ class DrawingManagers extends React.Component {
   }
 
   handleMarkerComplete= (e) => {
-    console.log(e.position)
+    //console.log(e.position)
 
       if (this.props.mode.show==="point"){
         const payload= {lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
