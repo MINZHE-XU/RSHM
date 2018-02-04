@@ -72,7 +72,6 @@ export function moveForward(apath,stepLength){
           isDrone:apath.isDrone,
           path: [firstPosition, ...apath.path.slice(1)]
       }
-
     }else if(distance===stepLength){
       return {
           id: apath.id,

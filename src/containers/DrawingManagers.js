@@ -58,7 +58,6 @@ class DrawingManagers extends React.Component {
       if (this.props.mode.show==="point"){
         const payload= {lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
         const r=this.props.addSpot (payload)
-
         //console.log({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})
         if(this.props.mode.algorithm==='local'){
           this.props.addSpotForMRs ({spots:{lat:payload.lat, lng:payload.lng}, size:this.props.size})

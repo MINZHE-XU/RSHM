@@ -1,9 +1,12 @@
+/* global google */
+/* eslint-disable no-undef */
+
 import React from 'react'
 import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone } from '../actions'
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath} from '../actions'
 import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
 
 class AddSpot extends React.Component {
@@ -15,10 +18,49 @@ class AddSpot extends React.Component {
     }
     this.handleFileSelect = this.handleFileSelect.bind(this);
   }
-  displayData(content) {
+  dataLoader(content) {
+
+      try
+    {
     //this.setState({data: content});
-    const obj = JSON.parse(content);
-    console.log(obj)
+    const loadedJson = JSON.parse(content);
+    console.log(loadedJson)
+
+    let spots=[]
+    spots=loadedJson.datapoints.map((datapoint,index) =>{
+      if(-90<=datapoint.lat &&datapoint.lat<=90 && -180<=datapoint.lng && datapoint.lng<=180){
+        return datapoint
+      }else{
+        throw "Please check latitude and longitude value"
+      } })
+
+    let paths=[]
+    paths=loadedJson.paths.map((singlePath,index) =>{
+      let route=[]
+      route= singlePath.path.map((position,index) =>{
+        if(-90<=position.lat &&position.lat<=90 && -180<=position.lng && position.lng<=180){
+          return new google.maps.LatLng(position.lat, position.lng)
+        }else{
+          throw "Please check latitude and longitude value"
+        }
+      })
+      return {isDrone:singlePath.isDrone === true,path: route }
+    })
+
+    spots.map((spot) =>{ this.handleAdd(spot.lat,spot.lng) })
+    paths.map((path) =>{ this.props.addOnePath( {path:path.path ,isDrone:path.isDrone}) })
+
+
+
+
+    }
+    catch(err)
+    {
+      let txt="Error While loading the data file.\n\n";
+      txt+= err + "\n\n";
+      txt+="Click OK to continue.\n\n";
+      alert(txt);
+    }
   }
 
   handleFileSelect(evt) {
@@ -31,17 +73,14 @@ class AddSpot extends React.Component {
     let that = this;
     let reader = new FileReader();
     reader.onload = function(e) {
-      that.displayData(e.target.result);
+      that.dataLoader(e.target.result);
     };
     reader.readAsText(file);
-
   }
 
   render() {
     const data = this.state.data;
     return (
-
-
 
 
       <Panel >
@@ -81,15 +120,19 @@ class AddSpot extends React.Component {
                 <Button bsSize="small" type="submit"  onClick={(e) => this.handleDeleteAll(e)}>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete All&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </Button>
+
             </Col>
             <Col xs={4} sm={4} md={4}>
-
-    <Button>
             <label className="file-load-label">
                 <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
-              Choose a file
-              </label>
-Default</Button>
+                &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
+            </label>
+            <Button bsSize="small" type="submit"  >
+              &nbsp;Upload Data&nbsp;
+            </Button>
+
+
+
 
             </Col>
         </Row >
@@ -173,6 +216,7 @@ const mapStateToProps = (state) => ({
   spots:state.spots
 })
 const mapDispatchToProps = {
+  addOnePath:addOnePath,
   addSpot: addSpot,
   deleteSpot: deleteSpot,
   resetMRs:resetMRs,

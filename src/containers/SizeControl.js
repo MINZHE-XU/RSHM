@@ -20,7 +20,7 @@ class SizeControl extends React.Component {
         </label>
         <input type='text' placeholder={this.props.size.length} ref='lengthInput' />
         <input type='text' placeholder={this.props.size.height} ref='heightInput' />
-        <button onClick={(e) => this.handleClick(e)}>
+        <button onClick={(e) => this.handleChangeSize(e)}>
           ChangeSize
         </button>
         {this.state.messageSize}
@@ -29,7 +29,7 @@ class SizeControl extends React.Component {
     )
   }
 
-  handleClick(e) {
+  handleChangeSize(e) {
 
     const lengthValue= (this.refs.lengthInput.value.trim()==="") ? parseFloat(this.refs.lengthInput.placeholder):parseFloat(this.refs.lengthInput.value.trim())
     const heightValue= (this.refs.heightInput.value.trim()==="") ? parseFloat(this.refs.heightInput.placeholder):parseFloat(this.refs.heightInput.value.trim())
