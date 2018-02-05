@@ -119,7 +119,7 @@ const DemoMap = compose(
     defaultMapTypeId={'custom_style'}
     options={{mapTypeControl:false,
     streetViewControl:false,
-  zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_TOP} 
+  zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_TOP}
 }
      }
 

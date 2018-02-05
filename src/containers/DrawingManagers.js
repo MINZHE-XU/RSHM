@@ -54,7 +54,10 @@ class DrawingManagers extends React.Component {
 
   handleMarkerComplete= (e) => {
     //console.log(e.position)
+    if(this.props.mode.dynamic==="drone"){
+this.props.addOnePath( {isDrone:(this.props.mode.dynamic==="drone") ,path: [new google.maps.LatLng(e.position.lat(), e.position.lng())] })
 
+    }else{
       if (this.props.mode.show==="point"){
         const payload= {lat: e.position.lat(),lng:e.position.lng(),isDynamic:false}
         const r=this.props.addSpot (payload)
@@ -67,6 +70,7 @@ class DrawingManagers extends React.Component {
         //this.props.clickListSpot ({...r,kind:this.props.mode.dynamic})
         this.props.centerListSpot ({...r,kind:this.props.mode.dynamic})
       }
+    }
 
   }
 

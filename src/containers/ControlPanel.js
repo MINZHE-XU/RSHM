@@ -19,21 +19,7 @@ class ControlPanel extends React.Component {
     return (
 
       <ListGroup>
-          <ListGroupItem>
-              <Row >
-                <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
-                      <label>Draw Path For</label>
-                  </Col>
-                <Col xs={7} sm={7} md={7}>
-                      <ButtonToolbar >
-                        <ToggleButtonGroup bsSize="small" type="radio" name="path-options" defaultValue={1} onChange={(e) => this.handleChangeDynamicType(e)}>
-                          <ToggleButton  value={1} ><Image className="data-point-image" alt="10x10" src="http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png" rounded /> Point</ToggleButton>
-                          <ToggleButton value={2} ><Image className="drone-image" alt="10x10" src="http://maps.google.com/mapfiles/kml/shapes/heliport.png" rounded /> Drone</ToggleButton>
-                        </ToggleButtonGroup>
-                        </ButtonToolbar>
-                  </Col>
-              </Row >
-        </ListGroupItem>
+
         <ListGroupItem>
             <Row >
                 <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
@@ -127,8 +113,6 @@ class ControlPanel extends React.Component {
         </ListGroupItem>
       </ListGroup>
 
-
-
     )
   }
   handleChangeShowMode(e) {
@@ -144,9 +128,7 @@ class ControlPanel extends React.Component {
     this.props.changeAlgorithmMode()
   }
 
-  handleChangeDynamicType(){
-    this.props.changeDynamicType()
-  }
+
 
   recomputeMRs(mode,size){
     this.props.resetMRs()
@@ -214,8 +196,7 @@ const mapDispatchToProps = {
   resetMRs:resetMRs,
   updateMRs: updateMRs,
   moveOneStep:moveOneStep,
-  changeSize: changeSize,
-    changeDynamicType:changeDynamicType
+  changeSize: changeSize
 }
 export default connect( mapStateToProps,mapDispatchToProps)(ControlPanel);
 

@@ -6,8 +6,8 @@ import  Component from 'react'
 import { bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
-import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath} from '../actions'
-import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
+import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath,changeDynamicType} from '../actions'
+import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button,Navbar,MenuItem,NavDropdown,Nav,NavItem,ButtonToolbar,ToggleButtonGroup,ToggleButton,Image } from 'react-bootstrap';
 
 class AddSpot extends React.Component {
   constructor() {
@@ -51,8 +51,6 @@ class AddSpot extends React.Component {
     paths.map((path) =>{ this.props.addOnePath( {path:path.path ,isDrone:path.isDrone}) })
 
 
-
-
     }
     catch(err)
     {
@@ -84,7 +82,40 @@ class AddSpot extends React.Component {
 
 
       <Panel >
-      <br />
+      <Navbar>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="/">RSHM</a>
+            </Navbar.Brand>
+          </Navbar.Header>
+
+            <Nav>
+              <NavDropdown eventKey={1} title="File" id="basic-nav-dropdown">
+                <MenuItem eventKey={1.1}>Read Local File</MenuItem>
+                <MenuItem divider />
+                <MenuItem eventKey={1.2}>Upload To Server</MenuItem>
+                <MenuItem eventKey={1.3}>Download From Server</MenuItem>
+              </NavDropdown>
+              <NavItem eventKey={2} href="#">Tips</NavItem>
+            </Nav>
+
+        </Navbar>
+
+        <Row >
+          <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
+                <label>&nbsp;&nbsp;Map Draw For</label>
+          </Col>
+          <Col xs={7} sm={7} md={7}>
+                <ButtonToolbar >
+                  <ToggleButtonGroup bsSize="small" type="radio" name="path-options" defaultValue={1} onChange={(e) => this.handleChangeDynamicType(e)}>
+                    <ToggleButton  value={1} ><Image className="data-point-image" alt="10x10" src="http://maps.google.com/mapfiles/kml/paddle/wht-diamond-lv.png" rounded /> Point</ToggleButton>
+                    <ToggleButton value={2} ><Image className="drone-image" alt="10x10" src="http://maps.google.com/mapfiles/kml/shapes/heliport.png" rounded /> Drone</ToggleButton>
+                  </ToggleButtonGroup>
+                  </ButtonToolbar>
+            </Col>
+        </Row >
+
+        <br />
         <Row >
             <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
               &nbsp;&nbsp;X-Coordinate
@@ -104,7 +135,8 @@ class AddSpot extends React.Component {
         <Col xs={4} sm={4} md={4}>
         </Col>&nbsp;&nbsp;&nbsp;{this.state.message}<br />
         <Row >
-
+            <Col xshidden sm={2} md={2}>
+            </Col>
             <Col xs={4} sm={4} md={4}>
                 <Button bsSize="small" type="submit"  onClick={(e) => this.handleClick(e)}>
                   &nbsp;&nbsp;Add Selected&nbsp;&nbsp;
@@ -122,21 +154,11 @@ class AddSpot extends React.Component {
                 </Button>
 
             </Col>
-            <Col xs={4} sm={4} md={4}>
-            <label className="file-load-label">
-                <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
-                &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
-            </label>
-            <Button bsSize="small" type="submit"  >
-              &nbsp;Upload Data&nbsp;
-            </Button>
 
-
-
-
-            </Col>
         </Row >
-              ​
+        <br />
+
+
       </Panel>
 
 
@@ -173,6 +195,10 @@ class AddSpot extends React.Component {
     }else{
       this.setState({ message:"invalid value"})
     }
+  }
+
+  handleChangeDynamicType(){
+    this.props.changeDynamicType()
   }
 
   handleChange(e) {
@@ -231,7 +257,8 @@ const mapDispatchToProps = {
   undateCandidateSpot:undateCandidateSpot,
   deleteCandidateSpot:deleteCandidateSpot,
   deleteDrone:deleteDrone,
-  deleteAllDrone:deleteAllDrone
+  deleteAllDrone:deleteAllDrone,
+  changeDynamicType:changeDynamicType
 }
 export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
 
@@ -256,4 +283,28 @@ export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
   DeleteAll
 </button>
 <br />
+
+
+
+<Navbar.Collapse>
+
+<Navbar.Form pullLeft>
+<label className="file-load-label">
+    <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
+    &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
+</label>
+<Button bsSize="small" type="submit">Submit</Button>
+<Button  bsSize="small" type="submit"  >
+  &nbsp;Upload Data&nbsp;
+</Button>
+</Navbar.Form>
+
+<Nav>
+<NavItem eventKey={1} href="#">Link</NavItem>
+<NavItem eventKey={2} >
+
+</NavItem>
+
+</Nav>
+</Navbar.Collapse>
 **/
