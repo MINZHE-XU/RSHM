@@ -11,13 +11,16 @@ const origin = {
     lng: 10000,
     kind:"unknown"
   },
-  candidateSpots:[]
+  candidateSpots:[],
+  uploadStatus:{status:"none",data_id:""},
+  downloadStatus:{status:"none",groupeddata:""}
 }
 
 const statusPoint = (state=origin , action) => {
+
   switch (action.type) {
+
     case 'CENTER_SPOT':
-    //console.log(action)
       return {...state,
         center:{
           id: action.id,
@@ -87,28 +90,57 @@ const statusPoint = (state=origin , action) => {
             return {...state ,candidateSpots:[...currentSpotToDelete.slice(0, indexToDelete), ...currentSpotToDelete.slice(indexToDelete + 1)]}
           }
           break;
-    case 'CHANGE_INFO_WINDOW_OPEN':
-    console.log(action)
-    const changedSpots=state.candidateSpots.map(function(spot, index){
-      return {...spot, isOpen:false}
-     })
-    const currentSpotToUpdate = state.candidateSpots
-    const indexToUpdate = currentSpotToUpdate.findIndex(
-      function(spot){
-        return spot.number === action.number;
-      }
-    )
 
-    if(indexToUpdate<0){
-      return state
-    }else{
-      const newSpotToUpdate = {
-        ...currentSpotToUpdate[indexToUpdate],
-        isOpen:!currentSpotToUpdate[indexToUpdate].isOpen
-      }
-      return {...state ,candidateSpots:[...changedSpots.slice(0, indexToUpdate), newSpotToUpdate , ...changedSpots.slice(indexToUpdate + 1)]}
-    }
-    break;
+        case 'CHANGE_INFO_WINDOW_OPEN':
+        console.log(action)
+        const changedSpots=state.candidateSpots.map(function(spot, index){
+          return {...spot, isOpen:false}
+         })
+        const currentSpotToUpdate = state.candidateSpots
+        const indexToUpdate = currentSpotToUpdate.findIndex(
+          function(spot){
+            return spot.number === action.number;
+          }
+        )
+
+        if(indexToUpdate<0){
+          return state
+        }else{
+          const newSpotToUpdate = {
+            ...currentSpotToUpdate[indexToUpdate],
+            isOpen:!currentSpotToUpdate[indexToUpdate].isOpen
+          }
+          return {...state ,candidateSpots:[...changedSpots.slice(0, indexToUpdate), newSpotToUpdate , ...changedSpots.slice(indexToUpdate + 1)]}
+        }
+        break;
+
+        case 'UPLOAD_DATA':
+            console.log(action.status)
+        switch (action.status) {
+          case 'uploading':
+            return {...state,
+              uploadStatus:{status:"upoading",data_id:""}
+            }
+            break;
+          case 'success':
+            return {...state,
+              uploadStatus:{status:"success",data_id:action.payload.data._id}
+            }
+            break;
+          case 'uploading':
+            return {...state,
+              uploadStatus:{status:"fail",data_id:""}
+            }
+            break;
+          case 'clean':
+            return {...state,
+              uploadStatus:{status:"none",data_id:""}
+            }
+            break;
+          }
+
+
+
 
       default:
       return state

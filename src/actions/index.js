@@ -1,3 +1,4 @@
+import axios from 'axios';
 let nextTodoId = 0
 
 
@@ -98,4 +99,41 @@ export function deletePath(payload) {
 }
 export function deleteAllPath(payload) {
   return { type:'DELETE_ALL_PATH' }
+}
+
+export function uploadData(data){
+  return function(dispatch){
+    dispatch({type:"UPLOAD_DATA",status:"uploading"})
+    axios.post("http://localhost:8080/api/datagroups",{groupeddata:data})
+      .then(function(response){
+        console.log(response.data)
+          dispatch({type:"UPLOAD_DATA",status:"success", payload:response.data})
+      })
+      .catch(function(err){
+          console.log(err)
+          dispatch({type:"UPLOAD_DATA",status:"fail", msg: 'error when uploading'})
+      })
+  }
+}
+
+export function downloadData(data){
+  return function(dispatch){
+    dispatch({type:"DOWNLOAD_DATA",status:"downloading"})
+      console.log(data)
+    axios.get("http://localhost:8080/api/datagroups/1"+data)
+      .then(function(response){
+        console.log(response.data)
+          dispatch({type:"DOWNLOAD_DATA",status:"success", payload:response.data})
+      })
+      .catch(function(err){
+          console.log(err)
+          dispatch({type:"DOWNLOAD_DATA",status:"fail", msg: 'failed to download, please check your token.'})
+      })
+  }
+}
+export function clearUploadStatus(data){
+    return ({type:"UPLOAD_DATA",status:"clean"})
+}
+export function cleanDownloadStatus(data){
+    return ({type:"DOWNLOAD_DATA",status:"clean"})
 }

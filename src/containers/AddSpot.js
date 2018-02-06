@@ -4,6 +4,7 @@
 import React from 'react'
 import  Component from 'react'
 import { bindActionCreators} from 'redux';
+import FileControler from '../components/FileControler'
 import { connect } from 'react-redux'
 import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone } from '../actions'
 import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath,changeDynamicType} from '../actions'
@@ -16,65 +17,9 @@ class AddSpot extends React.Component {
       message:'',
       data: null
     }
-    this.handleFileSelect = this.handleFileSelect.bind(this);
-  }
-  dataLoader(content) {
 
-      try
-    {
-    //this.setState({data: content});
-    const loadedJson = JSON.parse(content);
-    console.log(loadedJson)
-
-    let spots=[]
-    spots=loadedJson.datapoints.map((datapoint,index) =>{
-      if(-90<=datapoint.lat &&datapoint.lat<=90 && -180<=datapoint.lng && datapoint.lng<=180){
-        return datapoint
-      }else{
-        throw "Please check latitude and longitude value"
-      } })
-
-    let paths=[]
-    paths=loadedJson.paths.map((singlePath,index) =>{
-      let route=[]
-      route= singlePath.path.map((position,index) =>{
-        if(-90<=position.lat &&position.lat<=90 && -180<=position.lng && position.lng<=180){
-          return new google.maps.LatLng(position.lat, position.lng)
-        }else{
-          throw "Please check latitude and longitude value"
-        }
-      })
-      return {isDrone:singlePath.isDrone === true,path: route }
-    })
-
-    spots.map((spot) =>{ this.handleAdd(spot.lat,spot.lng) })
-    paths.map((path) =>{ this.props.addOnePath( {path:path.path ,isDrone:path.isDrone}) })
-
-
-    }
-    catch(err)
-    {
-      let txt="Error While loading the data file.\n\n";
-      txt+= err + "\n\n";
-      txt+="Click OK to continue.\n\n";
-      alert(txt);
-    }
   }
 
-  handleFileSelect(evt) {
-    let files = evt.target.files;
-    if (!files.length) {
-      //alert('No file select');
-      return;
-    }
-    let file = files[0];
-    let that = this;
-    let reader = new FileReader();
-    reader.onload = function(e) {
-      that.dataLoader(e.target.result);
-    };
-    reader.readAsText(file);
-  }
 
   render() {
     const data = this.state.data;
@@ -82,24 +27,9 @@ class AddSpot extends React.Component {
 
 
       <Panel >
-      <Navbar>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="/">RSHM</a>
-            </Navbar.Brand>
-          </Navbar.Header>
+      <FileControler />
 
-            <Nav>
-              <NavDropdown eventKey={1} title="File" id="basic-nav-dropdown">
-                <MenuItem eventKey={1.1}>Read Local File</MenuItem>
-                <MenuItem divider />
-                <MenuItem eventKey={1.2}>Upload To Server</MenuItem>
-                <MenuItem eventKey={1.3}>Download From Server</MenuItem>
-              </NavDropdown>
-              <NavItem eventKey={2} href="#">Tips</NavItem>
-            </Nav>
 
-        </Navbar>
 
         <Row >
           <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
@@ -114,6 +44,7 @@ class AddSpot extends React.Component {
                   </ButtonToolbar>
             </Col>
         </Row >
+
 
         <br />
         <Row >
@@ -135,7 +66,7 @@ class AddSpot extends React.Component {
         <Col xs={4} sm={4} md={4}>
         </Col>&nbsp;&nbsp;&nbsp;{this.state.message}<br />
         <Row >
-            <Col xshidden sm={2} md={2}>
+            <Col xsHidden sm={2} md={2}>
             </Col>
             <Col xs={4} sm={4} md={4}>
                 <Button bsSize="small" type="submit"  onClick={(e) => this.handleClick(e)}>
@@ -182,8 +113,7 @@ class AddSpot extends React.Component {
     if(-90<=latValue &&latValue<=90 && -180<=lngValue && lngValue<=180){
       let temp=this.props.spots;
       const r=this.props.addSpot({id:-1,lat:latValue,lng:lngValue,isDynamic:false})
-      console.log(r)
-      console.log("aa:"+this.props.spots)
+
       if(this.props.mode.algorithm==='local'){
         this.props.addSpotForMRs ({spots:{lat:latValue, lng:lngValue}, size:this.props.size})
       }else{
@@ -289,10 +219,7 @@ export default connect( mapStateToProps,mapDispatchToProps)(AddSpot);
 <Navbar.Collapse>
 
 <Navbar.Form pullLeft>
-<label className="file-load-label">
-    <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
-    &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
-</label>
+
 <Button bsSize="small" type="submit">Submit</Button>
 <Button  bsSize="small" type="submit"  >
   &nbsp;Upload Data&nbsp;
