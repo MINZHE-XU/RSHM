@@ -103,37 +103,37 @@ export function deleteAllPath(payload) {
 
 export function uploadData(data){
   return function(dispatch){
-    dispatch({type:"UPLOAD_DATA",status:"uploading"})
+    dispatch({type:"UPLOAD_DATA",status:"UPLOADING"})
     axios.post("http://localhost:8080/api/datagroups",{groupeddata:data})
       .then(function(response){
         console.log(response.data)
-          dispatch({type:"UPLOAD_DATA",status:"success", payload:response.data})
+          dispatch({type:"UPLOAD_DATA",status:response.data.status, payload:response.data.message})
       })
       .catch(function(err){
           console.log(err)
-          dispatch({type:"UPLOAD_DATA",status:"fail", msg: 'error when uploading'})
+          dispatch({type:"UPLOAD_DATA",status:"FAIL", payload:'Error heppens while uploading. Please check network and try again.'})
       })
   }
 }
 
 export function downloadData(data){
   return function(dispatch){
-    dispatch({type:"DOWNLOAD_DATA",status:"downloading"})
+    dispatch({type:"DOWNLOAD_DATA",status:"DOWNLOADING"})
       console.log(data)
-    axios.get("http://localhost:8080/api/datagroups/1"+data)
+    axios.get("http://localhost:8080/api/datagroups/"+data)
       .then(function(response){
         console.log(response.data)
-          dispatch({type:"DOWNLOAD_DATA",status:"success", payload:response.data})
+          dispatch({type:"DOWNLOAD_DATA",status:response.data.status, payload:response.data.message})
       })
       .catch(function(err){
           console.log(err)
-          dispatch({type:"DOWNLOAD_DATA",status:"fail", msg: 'failed to download, please check your token.'})
+          dispatch({type:"DOWNLOAD_DATA",status:"FAIL", payload: 'Error heppens while uploading. Please check network and try again.'})
       })
   }
 }
-export function clearUploadStatus(data){
-    return ({type:"UPLOAD_DATA",status:"clean"})
+export function cleanUploadStatus(data){
+    return ({type:"UPLOAD_DATA",status:"CLEAN"})
 }
 export function cleanDownloadStatus(data){
-    return ({type:"DOWNLOAD_DATA",status:"clean"})
+    return ({type:"DOWNLOAD_DATA",status:"CLEAN"})
 }

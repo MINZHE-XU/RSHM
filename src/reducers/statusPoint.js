@@ -12,8 +12,8 @@ const origin = {
     kind:"unknown"
   },
   candidateSpots:[],
-  uploadStatus:{status:"none",data_id:""},
-  downloadStatus:{status:"none",groupeddata:""}
+  uploadStatus:{status:"NONE",data_id:"",show:""},
+  downloadStatus:{status:"NONE",groupeddata:"",show:""}
 }
 
 const statusPoint = (state=origin , action) => {
@@ -115,30 +115,54 @@ const statusPoint = (state=origin , action) => {
         break;
 
         case 'UPLOAD_DATA':
-            console.log(action.status)
+            console.log(action)
         switch (action.status) {
-          case 'uploading':
+          case 'UPLOADING':
             return {...state,
-              uploadStatus:{status:"upoading",data_id:""}
+              uploadStatus:{status:"UPLOADING",data_id:"",show:"uploading your data"}
             }
             break;
-          case 'success':
+          case 'SUCCESS':
             return {...state,
-              uploadStatus:{status:"success",data_id:action.payload.data._id}
+              uploadStatus:{status:"SUCCESS",data_id:action.payload._id,show:"Successfully uploaded, you can use the following token to fetch data from server :"}
             }
             break;
-          case 'uploading':
+          case 'FAIL':
             return {...state,
-              uploadStatus:{status:"fail",data_id:""}
+              uploadStatus:{status:"FAIL",data_id:"",show:action.payload}
             }
             break;
-          case 'clean':
+          case 'CLEAN':
             return {...state,
-              uploadStatus:{status:"none",data_id:""}
+              uploadStatus:{status:"NONE",data_id:"",show:""}
             }
             break;
           }
 
+        case 'DOWNLOAD_DATA':
+            console.log(action)
+        switch (action.status) {
+          case 'DOWNLOADING':
+            return {...state,
+              downloadStatus:{status:"DOWNLOADING",groupeddata:"",show:"downloading your data"}
+            }
+            break;
+          case 'SUCCESS':
+            return {...state,
+              downloadStatus:{status:"SUCCESS",groupeddata:action.payload.groupeddata,show:"Successfully downloaded the file. Please click confirm to clean up add data to map"}
+            }
+            break;
+          case 'FAIL':
+            return {...state,
+              downloadStatus:{status:"FAIL",show:action.payload}
+            }
+            break;
+          case 'CLEAN':
+            return {...state,
+              downloadStatus:{status:"NONE",groupeddata:"",show:""}
+            }
+            break;
+          }
 
 
 

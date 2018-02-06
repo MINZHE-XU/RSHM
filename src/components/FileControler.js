@@ -7,19 +7,50 @@
   import {bindActionCreators} from 'redux';
   import { connect } from 'react-redux'
   import { addSpot, addSpotForMRs, deleteSpotForMRs,resetMRs,deleteDrone,downloadData } from '../actions'
-  import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath,changeDynamicType,uploadData} from '../actions'
+  import { clickListSpot,centerListSpot,deleteSpot,deleteAllSpot,updateMRs,deletePath,deleteAllPath,undateCandidateSpot,deleteCandidateSpot,deleteAllDrone ,addOnePath,changeDynamicType,uploadData,cleanUploadStatus,cleanDownloadStatus} from '../actions'
 
-import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button,Navbar,MenuItem,NavDropdown,Nav,NavItem,ButtonToolbar,ToggleButtonGroup,ToggleButton,Image } from 'react-bootstrap';
+import {Modal,Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button,Navbar,MenuItem,NavDropdown,Nav,NavItem,ButtonToolbar,ToggleButtonGroup,ToggleButton,Image } from 'react-bootstrap';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
   class FlieControler extends React.Component {
     constructor() {
       super();
       this.state = {
+        //showReadModal ,showExportModal,  showUploadModal,  showDownloadModal
+        showModal: [false,false,false,false,false],
+        loadFileStatus:{status:"NONE",groupeddata:{},show:""},
+        copied: false
       }
       this.handleFileSelect = this.handleFileSelect.bind(this);
+      this.open = this.open.bind(this)
+      this.close = this.close.bind(this)
     }
+
+    close() {
+
+      this.setState({showModal: [false,false,false,false,false],
+        loadFileStatus:{status:"NONE",groupeddata:{},show:""},
+        copied: false})
+        this.props.cleanUploadStatus()
+        this.props.cleanDownloadStatus()
+      }
+
+    open(eventKey) {
+
+      this.setState(function(prevState, props) {
+        let tempModel=[...prevState.showModal]
+        tempModel[eventKey-1]=true
+        console.log(tempModel)
+        return {
+           showModal: tempModel
+        };
+      });
+        //this.setState(showModal: [false,false,false,false]);
+      }
+
     render() {
       return (
+          <div>
         <Navbar>
             <Navbar.Header>
               <Navbar.Brand>
@@ -27,43 +58,161 @@ import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGr
               </Navbar.Brand>
             </Navbar.Header>
 
-              <Nav>
-                <NavDropdown eventKey={1} title="File" id="basic-nav-dropdown">
-                  <MenuItem eventKey={1.1}>Read Local File</MenuItem>
+              <Nav onSelect={this.open}>
+                <NavDropdown  title="File" id="basic-nav-dropdown">
+                  <MenuItem eventKey={1} >Read Local File</MenuItem>
+                  <MenuItem eventKey={2} >Export Data</MenuItem>
                   <MenuItem divider />
-                  <MenuItem eventKey={1.2}>Upload To Server</MenuItem>
-                  <MenuItem eventKey={1.3}>Download From Server</MenuItem>
+                  <MenuItem eventKey={3}>Upload To Server</MenuItem>
+                  <MenuItem eventKey={4}>Download From Server</MenuItem>
                 </NavDropdown>
-                <NavItem eventKey={2} href="#">Tips</NavItem>
+                <NavItem eventKey={5} href="#">Tips</NavItem>
               </Nav>
-              <Button bsSize="small" type="submit"  onClick={(e) => this.handleDownloadData(e)}>
-                Download Data
-              </Button>
-              <Button bsSize="small" type="submit"  onClick={(e) => this.handleUploadData(e)}>
-                Upload Data
-              </Button>
-              <label className="file-load-label">
-                  <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
-                  &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
-              </label>
 
 
           </Navbar>
+
+        <Modal show={this.state.showModal[0]} onHide={() =>this.close(1)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Read Local File</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <p>Please select the file</p>
+            <label className="file-load-label" >
+                <input type="file" className="file-load"  placeholder="Customized your placeholder" onChange={this.handleFileSelect}/>
+                &nbsp;&nbsp;&nbsp;&nbsp;Load File&nbsp;&nbsp;&nbsp;&nbsp;
+            </label>
+            <br /><p>&nbsp;</p>
+            <p>{this.state.loadFileStatus.show}</p>
+            <Button bsSize="small" type="submit" bsStyle="success" className={(this.state.loadFileStatus.status==="SUCCESS")?"none":"hide"} onClick={(e) => this.startFileAdding(this.state.loadFileStatus)}>
+              Confirm to add
+            </Button>
+            </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() =>this.close(1)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
+
+        <Modal show={this.state.showModal[1]} bsSize="large" onHide={() =>this.close(2)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Export Data</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <h4>Please save following data to a file ending with .json</h4>
+            <p>{JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path})}</p>
+            <CopyToClipboard className="btn btn-sm btn-default" text={JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path})}
+              onCopy={() => this.setState({copied: true})}>
+              <button>Copy to clipboard</button>
+            </CopyToClipboard>
+            <p>&nbsp;{(this.state.copied===true)? "Copied":""}&nbsp;</p>
+            </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() =>this.close(2)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
+
+        <Modal show={this.state.showModal[2]} onHide={() =>this.close(3)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Upload To Server</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <p>Do you want to upload local data to the server?</p>
+            <Button bsSize="small" type="submit" disabled={(this.props.statusPoint.uploadStatus.status==="SUCCESS"||this.props.statusPoint.uploadStatus.status==="UPLOADING")?true:false}  onClick={(e) => this.handleUploadData(e)}>
+              Confirm to Upload Data
+            </Button>
+            <br /><p>&nbsp;</p>
+            <p>{this.props.statusPoint.uploadStatus.show}</p>
+            <p style={{color:'red'}}>{this.props.statusPoint.uploadStatus.data_id}</p>
+            <CopyToClipboard className={(this.props.statusPoint.uploadStatus.status==="SUCCESS")?"btn btn-sm btn-default":"btn btn-sm btn-default hide"} text={this.props.statusPoint.uploadStatus.data_id}
+              onCopy={() => this.setState({copied: true})}>
+              <button>Copy Token to clipboard</button>
+            </CopyToClipboard>
+            <p>&nbsp;{(this.state.copied===true)? "Copied":""}&nbsp;</p>
+            </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() =>this.close(3)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
+
+        <Modal show={this.state.showModal[3]} onHide={() =>this.close(4)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Download From Server</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+          <p>Please enter your data token </p>
+                  <Row >
+          <Col xsHidden sm={2} md={2}>
+          </Col>
+          <Col xs={8} sm={8} md={8}>
+          <FormControl bsSize="small" type='text' placeholder="type token here" inputRef={(input) => this.tokenInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleClickToken(e)}} }  />
+          </Col>
+          <Col xsHidden sm={2} md={2}>
+          </Col>
+        </Row >
+        <br />
+        <Button bsSize="small" type="submit"  onClick={(e) => this.handleClickToken(e)} disabled={(this.props.statusPoint.downloadStatus.status==="SUCCESS"||this.props.statusPoint.downloadStatus.status==="UPLOADING")?true:false} >
+          Download Data
+        </Button>
+
+        <br /><p>&nbsp;</p>
+        <p>{this.props.statusPoint.downloadStatus.show}</p>
+        <Button bsSize="small" type="submit" bsStyle="success" className={(this.props.statusPoint.downloadStatus.status==="SUCCESS")?"none":"hide"} onClick={(e) => this.startFileAdding(this.dataLoader(this.props.statusPoint.downloadStatus.groupeddata)) }>
+          Confirm to add
+        </Button>
+
+            </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() =>this.close(4)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={this.state.showModal[4]} onHide={() =>this.close(5)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Tips</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+          <p>Under construction...</p>
+
+
+            </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() =>this.close(4)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
+
+           </div>
       )
     }
 
+
+
     handleUploadData(){
-      console.log(JSON.stringify({datapoints:this.props.spots, paths:this.props.path}))
+      console.log(JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path}))
 
       this.props.uploadData(JSON.stringify({datapoints:this.props.spots, paths:this.props.path}));
     }
 
-    handleDownloadData(){
-      console.log(JSON.stringify({datapoints:this.props.spots, paths:this.props.path}))
-
-      this.props.downloadData("5a798c126afb1f7528997545");
+    handleClickToken(){
+      const tokenValue= this.tokenInput.value.trim()
+      this.props.downloadData(tokenValue);
+//console.log(JSON.stringify({datapoints:this.props.spots, paths:this.props.path}))
     }
 
+
+    startFileAdding(source){
+      console.log("adddddddddddddding")
+      console.log(source)
+      if(source.status==="SUCCESS"){
+        this.handleDeleteAll()
+        source.groupeddata.datapoints.map((spot) =>{ this.handleAdd(spot.lat,spot.lng) })
+        source.groupeddata.paths.map((path) =>{ this.props.addOnePath( {path:path.path ,isDrone:path.isDrone}) })
+      }
+      this.close()
+    }
 
     dataLoader(content) {
         try
@@ -93,11 +242,14 @@ import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGr
         })
         return {isDrone:singlePath.isDrone === true,path: route }
       })
-      this.handleDelete()
-      spots.map((spot) =>{ this.handleAdd(spot.lat,spot.lng) })
-      paths.map((path) =>{ this.props.addOnePath( {path:path.path ,isDrone:path.isDrone}) })
 
+      console.log("???????????")
+
+      console.log({status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:""})
+      this.setState({loadFileStatus:{status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:"Successfully loaded the file. Please click confirm to clean up add data to map"}})
+      return {status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:"Successfully loaded the file. Please click confirm to clean up add data to map"}
       }
+
       catch(err)
       {
         let txt="Error While loading the data file.\n\n";
@@ -159,7 +311,7 @@ import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGr
         this.props.deletePath(this.props.statusPoint.clicked)
       }
       this.setState({ message:"deleted"})
-        }
+      }
 
         handleDeleteAll(e) {
           const r=this.props.deleteAllSpot()
@@ -201,7 +353,9 @@ import {Panel,Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGr
     deleteAllDrone:deleteAllDrone,
     changeDynamicType:changeDynamicType,
     uploadData:uploadData,
-    downloadData:downloadData
+    downloadData:downloadData,
+    cleanUploadStatus:cleanUploadStatus,
+    cleanDownloadStatus:cleanDownloadStatus
   }
 
 

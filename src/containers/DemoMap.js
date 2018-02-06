@@ -93,7 +93,6 @@ const DemoMap = compose(
           this.props.undateCandidateSpot(this.state.markers.map((spot,index) =>{return {id:-1, number:index, lat:spot.position.lat(), lng: spot.position.lng(),information:spot.information ,isOpen:(index===0)}}))// refs.map.fitBounds(bounds);
         },
 
-
         onMouseOut : (e) => {
           const payload= {id:-1,lat: 1000,lng:1000, type:"unknown"}
           this.props.centerListSpot (payload)
@@ -119,9 +118,8 @@ const DemoMap = compose(
     defaultMapTypeId={'custom_style'}
     options={{mapTypeControl:false,
     streetViewControl:false,
-  zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_TOP}
-}
-     }
+    zoomControlOptions: {position: google.maps.ControlPosition.RIGHT_TOP}
+    }}
 
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
