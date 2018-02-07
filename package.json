@@ -2,7 +2,7 @@
   "name": "v2",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vaibhavmule.github.io/react-redux-helloworld",
+  "homepage": "https://vaibhavmule.github.io/RSHM",
   "dependencies": {
     "axios": "^0.17.1",
     "google-maps-react": "^1.1.2",

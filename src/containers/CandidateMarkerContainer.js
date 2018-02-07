@@ -51,16 +51,16 @@ class CandidateMarkers extends React.Component {
     )
   }
 
-  handleOnMouseOver= (spot, e) => {
+  handleOnMouseOver (spot, e)  {
     this.props.centerListSpot ({id:-1, lat: spot.lat, lng: spot.lng, type:"point"})
   }
 
-  handleOnClick= (spot,e) => {
+  handleOnClick(spot,e) {
     this.props.clickListSpot ({id:-1, lat: spot.lat, lng: spot.lng,type:"point"})
     this.toggleInfoWindow(spot.number)
   }
 
-  toggleInfoWindow= (number) => {
+  toggleInfoWindow(number) {
     //change
     console.log(number)
     this.props.changeInfoWindowOpen(number)
