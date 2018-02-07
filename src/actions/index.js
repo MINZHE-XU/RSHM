@@ -104,7 +104,7 @@ export function deleteAllPath(payload) {
 export function uploadData(data){
   return function(dispatch){
     dispatch({type:"UPLOAD_DATA",status:"UPLOADING"})
-    axios.post("http://localhost:8080/api/datagroups",{groupeddata:data})
+    axios.post("http://45.76.115.192:8080/api/datagroups",{groupeddata:data})
       .then(function(response){
         console.log(response.data)
           dispatch({type:"UPLOAD_DATA",status:response.data.status, payload:response.data.message})
@@ -120,7 +120,7 @@ export function downloadData(data){
   return function(dispatch){
     dispatch({type:"DOWNLOAD_DATA",status:"DOWNLOADING"})
       console.log(data)
-    axios.get("http://localhost:8080/api/datagroups/"+data)
+    axios.get("http://45.76.115.192:8080/api/datagroups/"+data)
       .then(function(response){
         console.log(response.data)
           dispatch({type:"DOWNLOAD_DATA",status:response.data.status, payload:response.data.message})
