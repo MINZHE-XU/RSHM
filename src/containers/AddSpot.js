@@ -52,18 +52,18 @@ class AddSpot extends React.Component {
 
         <br />
         <Row >
-            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+            <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
               &nbsp;&nbsp;X-Coordinate
             </Col>
-            <Col xs={7} sm={7} md={7}>
+            <Col xs={6} sm={6} md={6}>
               <FormControl bsSize="small" type='text' placeholder={(this.props.statusPoint.clicked.lat===10000)?"type latitude here":this.props.statusPoint.clicked.lat} inputRef={(input) => this.latInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleClick(e)}} }  />
             </Col>
         </Row >
         <Row >
-            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+            <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
               &nbsp;&nbsp;Y-Coordinate
             </Col>
-            <Col xs={7} sm={7} md={7}>
+            <Col xs={6} sm={6} md={6}>
             <FormControl bsSize="small" type='text' placeholder={(this.props.statusPoint.clicked.lng===10000)?"type longtitude here":this.props.statusPoint.clicked.lng} inputRef={(input) => this.lngInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleClick(e)}} }  />
             </Col>
         </Row >

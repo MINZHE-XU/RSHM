@@ -12,7 +12,10 @@ class ControlPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      height: props.height
+      buttonValue:1 ,
+      stepLengthValue:1,
+      running:false,
+      runningShow:"Run Simulation",
     }
   }
   componentWillMount(){
@@ -106,8 +109,9 @@ class ControlPanel extends React.Component {
         <ListGroupItem>
             <Row >
                 <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
-                    <label onClick={(e) => this.handleOnPressInForward(e,12)}>Run Simulation</label>
+                    <label   className={(this.state.windowWidth<1000)?'hidden':''}>Run Simulation</label>
 
+                    <Button  onClick={(e) => this.handleSimulation(e)}  className={(this.state.windowWidth>=1000)?'hidden':''}>{this.state.runningShow}</Button>
                 </Col>
 
                 <Col xs={7} sm={7} md={7}>
@@ -116,35 +120,35 @@ class ControlPanel extends React.Component {
 
 
                         <ToggleButton value={-1}
-                        onMouseDown={(e) => this.handleOnPressInBackward(e,1)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,1)}>
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,1,-1)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,1,-1)}>
                           &lt;
                         </ToggleButton>
                         <ToggleButton value={-2}
-                        onMouseDown={(e) => this.handleOnPressInBackward(e,4)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,4)}>
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,4,-2)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,4,-2)}>
                           	&lt;&lt;
                         </ToggleButton>
                         <ToggleButton value={-3}
-                        onMouseDown={(e) => this.handleOnPressInBackward(e,12)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,12)}>
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,12,-3)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,12,-3)}>
                           	&lt;&lt;&lt;
                         </ToggleButton>
                         <br />
 
                         <ToggleButton value={1}
                         onMouseDown={(e) => this.handleOnPressInForward(e,1,1)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,1)}>
+                        onMouseUp={(e) => this.handleOnPressOut(e,1,1)}>
                           >
                         </ToggleButton>
                         <ToggleButton value={2}
-                        onMouseDown={(e) => this.handleOnPressInForward(e,4)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,4)}>
+                        onMouseDown={(e) => this.handleOnPressInForward(e,4,2)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,4,2)}>
                           >>
                         </ToggleButton>
                         <ToggleButton value={3}
-                        onMouseDown={(e) => this.handleOnPressInForward(e,12)}
-                        onMouseUp={(e) => this.handleOnPressOut(e,12)}>
+                        onMouseDown={(e) => this.handleOnPressInForward(e,12,3)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,12,3)}>
                           >>>
                         </ToggleButton>
 
@@ -208,18 +212,45 @@ class ControlPanel extends React.Component {
 
 
   handleOnPressInForward(e,stepLengthNumber,type) {
-    console.log(type)
+    clearInterval(this.interval);
+    this.setState({  running:false,
+    runningShow:"Run Simulation"
+  })
+    this.setState({   buttonValue:type ,
+          stepLengthValue:stepLengthNumber})
+
     this.interval = setInterval(() =>{ this.handleMoveOneStep(stepLengthNumber) }, 100);
   }
-  handleOnPressInBackward(e,stepLengthNumber) {
-    console.log(e)
+
+  handleOnPressInBackward(e,stepLengthNumber,type) {
+    clearInterval(this.interval);
+    this.setState({  running:false,
+    runningShow:"Run Simulation"
+  })
+    this.setState({   buttonValue:type ,
+          stepLengthValue:stepLengthNumber})
+
     this.interval = setInterval(() =>{ this.handleMoveBackOneStep(stepLengthNumber) }, 100);
   }
 
   handleOnPressOut(e) {
     clearInterval(this.interval);
   }
-
+  handleSimulation(e) {
+    if (this.state.running===true){
+      clearInterval(this.interval);
+      this.setState({  running:false,
+        runningShow:"Run Simulation",
+      })
+    }else{
+      if (this.state.buttonValue>0){
+        this.interval = setInterval(() =>{ this.handleMoveOneStep(this.state.stepLengthValue) }, 100);
+      }else{
+        this.interval = setInterval(() =>{ this.handleMoveBackOneStep(this.state.stepLengthValue) }, 100);
+      }
+      this.setState({  running:true,runningShow:"Stop Simulation"})
+    }
+  }
 
 
   handleChangeSize() {

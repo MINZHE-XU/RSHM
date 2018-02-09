@@ -32,9 +32,7 @@ function crossSliceReducer(state, action) {
        drones: state.drones
      }
 
-    if (action.type=== "FULLY_UPDATE_MRS"){
-        crossStorage.mrs=mrsFull(state.mrs, action,  state.spots )
-    }
+
 
     //cases needs to update spots and drones
     if (action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"||action.type=== "MOVE_BACK_ONE_STEP"){
@@ -89,6 +87,9 @@ function crossSliceReducer(state, action) {
                   })
 
            //console.log(crossStorage.mrs)
+           if ( state.mode.algorithm==='full' ){
+               crossStorage.mrs=mrsFull(state.mrs, {type:"FULLY_UPDATE_MRS", size:crossStorage.size},  crossStorage.spots )
+           }
 
       }
 
@@ -114,6 +115,9 @@ function crossSliceReducer(state, action) {
         crossStorage.spots=tempSpots
       }
 
+      if (action.type=== "FULLY_UPDATE_MRS" ){
+          crossStorage.mrs=mrsFull(state.mrs, {type:"FULLY_UPDATE_MRS", size:crossStorage.size},  crossStorage.spots )
+      }
         return crossStorage;
 
 }

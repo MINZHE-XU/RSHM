@@ -68,8 +68,6 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
                 </NavDropdown>
                 <NavItem eventKey={5} href="#">Tips</NavItem>
               </Nav>
-
-
           </Navbar>
 
         <Modal show={this.state.showModal[0]} onHide={() =>this.close(1)}>
@@ -100,8 +98,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
           </Modal.Header>
           <Modal.Body className="text-center">
             <h4>Please save following data to a file ending with .json</h4>
-            <p>{JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path})}</p>
-            <CopyToClipboard className="btn btn-sm btn-default" text={JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path})}
+            <p>{JSON.stringify({datapoints:this.props.spots.filter((spot) =>spot.isDynamic===false), paths:this.props.path.map(function(onePath){ return {...onePath, path:onePath.fullPath,fullPath:[] } })  })}</p>
+            <CopyToClipboard className="btn btn-sm btn-default" text={JSON.stringify({datapoints:this.props.spots.filter((spot) =>spot.isDynamic===false), paths:this.props.path.map(function(onePath){ return {...onePath, path:onePath.fullPath,fullPath:[] } }) })}
               onCopy={() => this.setState({copied: true})}>
               <button>Copy to clipboard</button>
             </CopyToClipboard>
@@ -191,9 +189,8 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 
     handleUploadData(){
-      console.log(JSON.stringify({datapoints:this.props.spots.map((spot) =>{if(spot.isDynamic===false) return spot}), paths:this.props.path}))
-
-      this.props.uploadData(JSON.stringify({datapoints:this.props.spots, paths:this.props.path}));
+      console.log(JSON.stringify({datapoints:this.props.spots.filter((spot) =>spot.isDynamic===false), paths:this.props.path.map(function(onePath){ return {...onePath, path:onePath.fullPath,fullPath:[] } }) }))
+      this.props.uploadData(JSON.stringify({datapoints:this.props.spots.filter((spot) =>spot.isDynamic===false), paths:this.props.path.map(function(onePath){ return {...onePath, path:onePath.fullPath,fullPath:[] } }) }));
     }
 
     handleClickToken(){
@@ -220,6 +217,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
       //this.setState({data: content});
       const loadedJson = JSON.parse(content);
       //console.log(JSON.stringify(loadedJson))
+      //console.log("????????????")
       console.log(loadedJson)
 
       let spots=[]
@@ -244,8 +242,11 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
       })
 
       console.log("???????????")
+      console.log(spots)
+      console.log(paths)
 
       console.log({status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:""})
+
       this.setState({loadFileStatus:{status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:"Successfully loaded the file. Please click confirm to clean up add data to map"}})
       return {status:"SUCCESS", groupeddata: {datapoints:spots,paths:paths} ,show:"Successfully loaded the file. Please click confirm to clean up add data to map"}
       }
