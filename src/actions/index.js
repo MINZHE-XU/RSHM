@@ -92,6 +92,10 @@ export function moveOneStep(payload) {
   return { type:'MOVE_ONE_STEP', size:payload.size,stepLengthNumber:payload.stepLengthNumber}
 }
 
+export function moveBackOneStep(payload) {
+  return { type:'MOVE_BACK_ONE_STEP', size:payload.size,stepLengthNumber:payload.stepLengthNumber}
+}
+
 export function deletePath(payload) {
   //centerListSpot ({id:-1 , lat:10000, lng:10000})
   //clickListSpot ({id:-1 , lat:10000, lng:10000})

@@ -24,16 +24,21 @@ class AddSpot extends React.Component {
   render() {
     const data = this.state.data;
     return (
-
-
-      <Panel >
+      <div>
       <FileControler />
 
 
-
+      <Panel id="collapsible-panel" defaultExpanded>
+        <Panel.Heading>
+          <Panel.Title toggle>
+            Datapoints Panel
+          </Panel.Title>
+        </Panel.Heading>
+        <Panel.Collapse>
+        <br />
         <Row >
           <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
-                <label>&nbsp;&nbsp;Map Draw For</label>
+                <label>&nbsp;&nbsp;Object Type</label>
           </Col>
           <Col xs={7} sm={7} md={7}>
                 <ButtonToolbar >
@@ -44,7 +49,6 @@ class AddSpot extends React.Component {
                   </ButtonToolbar>
             </Col>
         </Row >
-
 
         <br />
         <Row >
@@ -66,7 +70,7 @@ class AddSpot extends React.Component {
         <Col xs={4} sm={4} md={4}>
         </Col>&nbsp;&nbsp;&nbsp;{this.state.message}<br />
         <Row >
-            <Col xsHidden sm={2} md={2}>
+            <Col xs={2} sm={2} md={2}>
             </Col>
             <Col xs={4} sm={4} md={4}>
                 <Button bsSize="small" type="submit"  onClick={(e) => this.handleClick(e)}>
@@ -88,11 +92,11 @@ class AddSpot extends React.Component {
 
         </Row >
         <br />
-
-
+        </Panel.Collapse>
       </Panel>
 
 
+      </div>
     )
   }
 

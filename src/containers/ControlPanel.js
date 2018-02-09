@@ -3,27 +3,80 @@ import React from 'react'
 import  Component from 'react'
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux'
-import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep,changeSize,changeDynamicType  } from '../actions'
+import {changeShowMode,changeAlgorithmMode,updateMRs,deleteAllSpot,resetMRs,addSpotForMRs,moveOneStep,changeSize,changeDynamicType,moveBackOneStep  } from '../actions'
 
 import { ButtonToolbar, ToggleButtonGroup,ToggleButton,Image,Panel } from 'react-bootstrap';
-import {Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
+import {Tooltip, Grid, Row, Col, Clearfix,ListGroup,ListGroupItem,Table,Form,FormGroup,ControlLabel,FormControl,Button } from 'react-bootstrap';
 //&nbsp;
 class ControlPanel extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-
+      height: props.height
     }
   }
+  componentWillMount(){
+    console.log(window.innerWidth)
+      this.setState({windowWidth: window.innerWidth});
+    }
   render() {
     return (
+<div>
 
+      <Panel id="collapsible-panel" defaultExpanded>
+        <Panel.Heading>
+          <Panel.Title toggle>
+            Rang Size Panel
+          </Panel.Title>
+        </Panel.Heading>
+        <Panel.Collapse>
+<br />
+        <Row >
+
+            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+              &nbsp;&nbsp;&nbsp;&nbsp;Width
+            </Col>
+            <Col xs={7} sm={7} md={7}>
+              <FormControl bsSize="small" type='text' placeholder={this.props.size.length} inputRef={(input) => this.lengthInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleChangeSize() }} }  />
+            </Col>
+        </Row >
+        <Row >
+            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+              &nbsp;&nbsp;&nbsp;&nbsp;Height
+            </Col>
+            <Col xs={7} sm={7} md={7}>
+              <FormControl bsSize="small" type='text' placeholder={this.props.size.height}  inputRef={(input) => this.heightInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleChangeSize() }}}/>
+            </Col>
+        </Row >
+        <Row >
+            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </Col>
+            <Col xs={4} sm={4} md={4}>
+                <Button bsSize="small" type="submit"  onClick={() => this.handleChangeSize()}>
+                  Set Range Size
+                </Button>
+            </Col>
+            <Col xs={4} sm={4} md={4}>
+                {this.state.messageSize}
+            </Col>
+        </Row >
+<br />
+        </Panel.Collapse>
+      </Panel>
+
+<Panel id="collapsible-panel" defaultExpanded>
+  <Panel.Heading>
+    <Panel.Title toggle>
+      Algorithm Panel
+    </Panel.Title>
+  </Panel.Heading>
+  <Panel.Collapse>
       <ListGroup>
-
         <ListGroupItem>
             <Row >
                 <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
-                    <label>Algorithm</label>
+                    <label>Update Algorithm</label>
                 </Col>
                 <Col xs={7} sm={7} md={7}>
                     <ButtonToolbar >
@@ -53,68 +106,67 @@ class ControlPanel extends React.Component {
         <ListGroupItem>
             <Row >
                 <Col componentClass={ControlLabel} xs={5} sm={5} md={5}>
-                    <label>Start Simulation</label>
+                    <label onClick={(e) => this.handleOnPressInForward(e,12)}>Run Simulation</label>
+
                 </Col>
+
                 <Col xs={7} sm={7} md={7}>
                     <ButtonToolbar >
                       <ToggleButtonGroup bsSize="small" type="radio" name="algorithm-options" defaultValue={1} >
+
+
+                        <ToggleButton value={-1}
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,1)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,1)}>
+                          &lt;
+                        </ToggleButton>
+                        <ToggleButton value={-2}
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,4)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,4)}>
+                          	&lt;&lt;
+                        </ToggleButton>
+                        <ToggleButton value={-3}
+                        onMouseDown={(e) => this.handleOnPressInBackward(e,12)}
+                        onMouseUp={(e) => this.handleOnPressOut(e,12)}>
+                          	&lt;&lt;&lt;
+                        </ToggleButton>
+                        <br />
+
                         <ToggleButton value={1}
-                        onMouseDown={(e) => this.handleOnPressIn(e,1)}
+                        onMouseDown={(e) => this.handleOnPressInForward(e,1,1)}
                         onMouseUp={(e) => this.handleOnPressOut(e,1)}>
                           >
                         </ToggleButton>
                         <ToggleButton value={2}
-                        onMouseDown={(e) => this.handleOnPressIn(e,4)}
+                        onMouseDown={(e) => this.handleOnPressInForward(e,4)}
                         onMouseUp={(e) => this.handleOnPressOut(e,4)}>
                           >>
                         </ToggleButton>
                         <ToggleButton value={3}
-                        onMouseDown={(e) => this.handleOnPressIn(e,12)}
+                        onMouseDown={(e) => this.handleOnPressInForward(e,12)}
                         onMouseUp={(e) => this.handleOnPressOut(e,12)}>
                           >>>
                         </ToggleButton>
+
+
                       </ToggleButtonGroup>
-                      </ButtonToolbar>
+                    </ButtonToolbar>
                 </Col>
             </Row >
         </ListGroupItem>
-
-        <ListGroupItem>
-        <Row >
-            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
-              &nbsp;&nbsp;&nbsp;&nbsp;Width
-            </Col>
-            <Col xs={7} sm={7} md={7}>
-              <FormControl bsSize="small" type='text' placeholder={this.props.size.length} inputRef={(input) => this.lengthInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleChangeSize() }} }  />
-            </Col>
-        </Row >
-        <Row >
-            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
-              &nbsp;&nbsp;&nbsp;&nbsp;Height
-            </Col>
-            <Col xs={7} sm={7} md={7}>
-              <FormControl bsSize="small" type='text' placeholder={this.props.size.height}  inputRef={(input) => this.heightInput = input} onKeyPress={(e) =>{if (e.key === 'Enter'){this.handleChangeSize() }}}/>
-            </Col>
-        </Row >
-        <Row >
-            <Col componentClass={ControlLabel} xs={4} sm={4} md={4}>
-              &nbsp;&nbsp;&nbsp;&nbsp;
-            </Col>
-            <Col xs={4} sm={4} md={4}>
-                <Button bsSize="small" type="submit"  onClick={() => this.handleChangeSize()}>
-                  Set Range Size
-                </Button>
-            </Col>
-            <Col xs={4} sm={4} md={4}>
-                {this.state.messageSize}
-            </Col>
-        </Row >
-
-        </ListGroupItem>
       </ListGroup>
+      </Panel.Collapse>
+    </Panel>
+
+
+
+</div>
+
 
     )
   }
+
+
   handleChangeShowMode(e) {
     this.props.changeShowMode();
   }
@@ -149,12 +201,21 @@ class ControlPanel extends React.Component {
   handleMoveOneStep(stepLengthNumber) {
       console.log(this.props.moveOneStep({size:this.props.size, stepLengthNumber:stepLengthNumber}))
   }
+  handleMoveBackOneStep(stepLengthNumber) {
+      console.log(this.props.moveBackOneStep({size:this.props.size, stepLengthNumber:stepLengthNumber}))
+  }
 
 
-  handleOnPressIn(e,stepLengthNumber) {
-    console.log(e)
+
+  handleOnPressInForward(e,stepLengthNumber,type) {
+    console.log(type)
     this.interval = setInterval(() =>{ this.handleMoveOneStep(stepLengthNumber) }, 100);
   }
+  handleOnPressInBackward(e,stepLengthNumber) {
+    console.log(e)
+    this.interval = setInterval(() =>{ this.handleMoveBackOneStep(stepLengthNumber) }, 100);
+  }
+
   handleOnPressOut(e) {
     clearInterval(this.interval);
   }
@@ -196,7 +257,8 @@ const mapDispatchToProps = {
   resetMRs:resetMRs,
   updateMRs: updateMRs,
   moveOneStep:moveOneStep,
-  changeSize: changeSize
+  changeSize: changeSize,
+  moveBackOneStep:moveBackOneStep
 }
 export default connect( mapStateToProps,mapDispatchToProps)(ControlPanel);
 

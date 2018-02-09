@@ -149,7 +149,7 @@ const statusPoint = (state=origin , action) => {
             break;
           case 'SUCCESS':
             return {...state,
-              downloadStatus:{status:"SUCCESS",groupeddata:action.payload.groupeddata,show:"Successfully downloaded the file. Please click confirm to clean up add data to map"}
+              downloadStatus:{status:"SUCCESS",groupeddata:action.payload.groupeddata,show:"Successfully downloaded the file. Please click confirm to clean up and add data to map"}
             }
             break;
           case 'FAIL':

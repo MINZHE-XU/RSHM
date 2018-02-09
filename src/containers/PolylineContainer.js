@@ -18,19 +18,20 @@ class PolylineContainer extends React.Component {
 
   render() {
     return (
+
       this.props.path.map((apath) =>
       <Polyline path={apath.path}
         key={apath.id}
         visible={true}
         options= {{
           visible: this.props.mode.show==="point" ,
-          strokeWeight: 1,
+          strokeWeight: 0.5,
           strokeColor:'pink',
           zIndex:-1
         }}
-
       />
       )
+
     )
   }
 

@@ -1,7 +1,7 @@
 /* global google */
 /* eslint-disable no-undef */
 import React from 'react'
-import {  GoogleMap } from "react-google-maps"
+import {  GoogleMap, Polyline } from "react-google-maps"
 import { connect } from 'react-redux'
 import {bindActionCreators} from 'redux';
 import { addOnePath ,addSpot,addSpotForMRs,updateMRs,clickListSpot ,centerListSpot} from '../actions'
@@ -11,12 +11,26 @@ class DrawingManagers extends React.Component {
   constructor() {
     super();
     this.state = {
-      visible: true
+      visible: true ,
+      coverlines:[]
     }
   }
 
   render() {
+    const polidraw=    this.state.coverlines.map((path,index) =>
+    <Polyline path={path}
+               key={index}
+               visible={true}
+               options= {{
+                 visible: true,
+                 strokeWeight: 1,
+                 strokeColor:'white',
+                 zIndex:-2
+               }}
+             />)
+
     return (
+      <div>
       <DrawingManager
       ref='manager'
            defaultOptions={{
@@ -30,10 +44,10 @@ class DrawingManagers extends React.Component {
              },
              polylineOptions: {
                //this.props.mode.show==="point"
-               visible: false ,
-               strokeWeight: 2,
-               strokeColor:'red',
-               zIndex:-2
+               visible: true ,
+               strokeWeight: 0.5,
+               strokeColor:'green',
+               zIndex:-3
              },
              markerOptions: {
                //this.props.mode.show==="point"
@@ -43,13 +57,26 @@ class DrawingManagers extends React.Component {
            onMarkerComplete={this.handleMarkerComplete}
            onPolylineComplete={this.handlePolylineComplete}
          />
-      )
+      {polidraw}
+      </div>
+
+)
+
+
   }
 
   handlePolylineComplete= (e) => {
     console.log(e.getPath().b)
     this.props.addOnePath( {path:e.getPath().b ,isDrone:(this.props.mode.dynamic==="drone")})
     console.log(JSON.stringify({path:e.getPath().b ,isDrone:(this.props.mode.dynamic==="drone")}))
+
+    this.setState(function(prevState, props) {
+      console.log(prevState)
+      return {
+         coverlines: [...prevState.coverlines, e.getPath().b]
+      };
+    });
+
   }
 
   handleMarkerComplete= (e) => {

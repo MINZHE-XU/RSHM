@@ -37,7 +37,7 @@ function crossSliceReducer(state, action) {
     }
 
     //cases needs to update spots and drones
-    if (action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"){
+    if (action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"||action.type=== "MOVE_BACK_ONE_STEP"){
 
         const currentSpotToSearch =  state.spots
         crossStorage.drones=[]
@@ -94,7 +94,7 @@ function crossSliceReducer(state, action) {
 
 
     // cases need to update surveillanced relationships
-    if (action.type=== 'ADD_SPOT'  ||action.type=== 'ADD_ONE_PATH' || action.type=== "MOVE_ONE_STEP"||"DELETE_DRONE"){
+    if (action.type=== 'ADD_SPOT'  || 'ADD_ONE_PATH' ||  "MOVE_ONE_STEP"||"DELETE_DRONE"||"MOVE_BACK_ONE_STEP"){
 
         // to compute the new
         crossStorage.spots=crossStorage.spots.map(function(spot){return {...spot, surveillanced:false}})

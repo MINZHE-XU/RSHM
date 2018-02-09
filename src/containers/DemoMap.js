@@ -28,8 +28,8 @@ const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox
 const DemoMap = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places",
-    loadingElement: <div style={{ height: `800%` }} />,
-    containerElement: <div style={{ height: `800px` }} />,
+    loadingElement: <div style={{ height: `100%` }} />,
+    containerElement: <div style={{ height: "80vmin"   }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({

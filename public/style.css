@@ -37,6 +37,11 @@ body {
     background-color: white;
     display: inline-block;
 }
+.mapDIV{
+  margin: 10px 5%;
+
+
+}
 
 
 .file-load, .file-load-label{
