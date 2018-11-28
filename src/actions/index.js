@@ -100,7 +100,7 @@ export function deleteAllPath(payload) {
 export function uploadData(data) {
   return function(dispatch) {
     dispatch({type: "UPLOAD_DATA", status: "UPLOADING"})
-    axios.post("http://45.76.115.192:8080/api/datagroups", {groupeddata: data}).then(function(response) {
+    axios.post("http://rshm-api.xuminzhe.com/api/datagroups", {groupeddata: data}).then(function(response) {
       console.log(response.data)
       dispatch({type: "UPLOAD_DATA", status: response.data.status, payload: response.data.message})
     }).catch(function(err) {
@@ -115,7 +115,7 @@ export function downloadData(data) {
   return function(dispatch) {
     dispatch({type: "DOWNLOAD_DATA", status: "DOWNLOADING"})
     console.log(data)
-    axios.get("http://45.76.115.192:8080/api/datagroups/" + data).then(function(response) {
+    axios.get("http://rshm-api.xuminzhe.com/api/datagroups/" + data).then(function(response) {
       console.log(response.data)
       dispatch({type: "DOWNLOAD_DATA", status: response.data.status, payload: response.data.message})
     }).catch(function(err) {
