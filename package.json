@@ -2,9 +2,10 @@
   "name": "RSHM",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "https://rshm.xuminzhe.com/",
+  "homepage": "https://rshm.xuminzhe.com/",
   "dependencies": {
     "axios": "^0.17.1",
+    "@types/googlemaps": "^3.0.0",
     "google-maps-react": "^1.1.2",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.1",

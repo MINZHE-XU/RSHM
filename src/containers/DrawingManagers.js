@@ -56,13 +56,13 @@ class DrawingManagers extends React.Component {
   }
 
   handlePolylineComplete = (e) => {
-    console.log(e.getPath().b)
+    console.log(e.getPath())
     this.props.addOnePath({
-      path: e.getPath().b,
+      path: e.getPath().j,
       isDrone: (this.props.mode.dynamic === "drone")
     })
     console.log(JSON.stringify({
-      path: e.getPath().b,
+      path: e.getPath().j,
       isDrone: (this.props.mode.dynamic === "drone")
     }))
 

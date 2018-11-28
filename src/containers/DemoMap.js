@@ -26,7 +26,7 @@ const {withScriptjs, withGoogleMap, GoogleMap, Marker} = require("react-google-m
 const {SearchBox} = require("react-google-maps/lib/components/places/SearchBox");
 // to show map on the page
 const DemoMap = compose(withProps({
-  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyA1AZfv7mJ0-GTkCeYuQDL34-OaqSCQWmo&v=3.exp&libraries=geometry,drawing,places", loadingElement: <div style={{
+  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyBi2CvzNQx7gaeEJOs5Ow8Y2ZYUU_H7QFo&v=3.exp&libraries=geometry,drawing,places", loadingElement: <div style={{
       height: `100%`
     }}/>,
   containerElement: <div style={{

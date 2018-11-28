@@ -104,3 +104,7 @@ connect([mapStateToProps], [mapDispatchToProps], [mergeProps],[options])
 	Mongoose is used to format the data schema and drive the mongodb.
 * React-scripts
 	This application uses react-scripts to bundles React in production mode and optimizes the build for the best performance.
+
+  ‘
+  yarn add -D @types/googlemaps
+  ’
