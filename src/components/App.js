@@ -5,6 +5,7 @@ import DemoMap from '../containers/DemoMap'
 import SizeControl from '../containers/SizeControl'
 import ControlPanel from '../containers/ControlPanel'
 import Footer from './footer'
+
 //import MyFancyComponent from '../containers/MapNew1'
 import {withScriptjs, withGoogleMap, GoogleMap, Marker} from "react-google-maps"
 import {
@@ -18,6 +19,7 @@ import {
 } from 'react-bootstrap';
 
 class App extends Component {
+
   render() {
     return (<Grid>
       <Row className="show-grid">

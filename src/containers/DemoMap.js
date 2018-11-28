@@ -20,13 +20,17 @@ import RectangelContainer from './RectangelContainer'
 import DrawingManagers from './DrawingManagers'
 import DroneContainer from './DroneContainer'
 
+require('dotenv').config()
 const _ = require("lodash");
 const {compose, withProps, lifecycle} = require("recompose");
 const {withScriptjs, withGoogleMap, GoogleMap, Marker} = require("react-google-maps");
 const {SearchBox} = require("react-google-maps/lib/components/places/SearchBox");
+
+console.log(process.env.Google_API)
 // to show map on the page
 const DemoMap = compose(withProps({
-  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=123&v=3.exp&libraries=geometry,drawing,places", loadingElement: <div style={{
+  googleMapURL: "https://maps.googleapis.com/maps/api/js?key=" + process.env.Google_API + "&v=3.exp&libraries=geometry,drawing,places",
+  loadingElement: <div style={{
       height: `100%`
     }}/>,
   containerElement: <div style={{
@@ -67,6 +71,7 @@ const DemoMap = compose(withProps({
         this.setState({bounds: refs.map.getBounds(), center: refs.map.getCenter()})
       },
       onSearchBoxMounted: ref => {
+
         refs.searchBox = ref;
       },
       onPlacesChanged: () => {
@@ -111,7 +116,7 @@ const DemoMap = compose(withProps({
       },
       onMouseOver: (e) => {
         this.setState({bounds: refs.map.getBounds(), center: refs.map.getCenter()})
-        console.log("ssadas")
+
       }
 
     })
