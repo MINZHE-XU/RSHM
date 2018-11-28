@@ -20,7 +20,6 @@ import RectangelContainer from './RectangelContainer'
 import DrawingManagers from './DrawingManagers'
 import DroneContainer from './DroneContainer'
 
-require('dotenv').config()
 const _ = require("lodash");
 const {compose, withProps, lifecycle} = require("recompose");
 const {withScriptjs, withGoogleMap, GoogleMap, Marker} = require("react-google-maps");
